@@ -37,15 +37,14 @@ export const updateUserRole = async(req,res) =>{
             return res.status(400).json({ message: "Invalid role" });
         }
 
-        const user = await User.findById(id);
-        if(!user){
+        const updatedUser = await User.findById(id);
+        if(!updatedUser){
             return res.status(404).json({message: 'User not found'});
         }
         
-        user.role = role;
-        await user.save();
+        updatedUser.role = role;
+        await updatedUser.save();
 
-        const updatedUser = await User.findById(id).select("-password");
         return res.status(200).json({
             message: 'User role updated successfully',
             data:updatedUser
@@ -61,12 +60,18 @@ export const updateUserRole = async(req,res) =>{
 export const deleteUser = async(req,res) =>{
     try{
         const {id} = req.params;
-        const user = await User.findById(id);
-        if(!user){
-            return res.status(404).json({message:"User not Found"})
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if(!deletedUser){
+            return res.status(404).json({message: 'User not found'});
         }
-        await User.findByIdAndDelete(id);
-        return res.status(200).json({message: 'User deleted successfully'});
+        const userObj = deletedUser.toObject();
+        delete userObj.password; 
+
+        return res.status(200).json({
+            message: 'User deleted successfully',
+            data:userObj
+        });
 
     }catch(err){
         console.log(err)

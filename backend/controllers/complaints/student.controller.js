@@ -1,4 +1,5 @@
 import Complaint from "../models/complaint.model.js";
+import mongoose from 'mongoose';
 
 export const createComplaint = async (req, res) => {
     try{
@@ -28,7 +29,8 @@ export const getMyComplaints = async (req,res) =>{
         const complaints = await Complaint
             .find({ student: req.user._id })
             .populate('category', 'name')
-            .populate('student', 'name email');
+            .populate('student', 'name email')
+            .sort({ createdAt: -1 });
 
         return res.status(200).json({message: 'Complaints retrieved successfully',data:complaints});
 
@@ -41,10 +43,16 @@ export const getMyComplaints = async (req,res) =>{
 
 export const getComplaintById = async (req,res) => {
     const {id} = req.params;
+
     try{
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid complaint ID' });
+        }
+
         const complaint = await Complaint.findById(id)
-        .populate('student','name email')
-        .populate('assignedTo','name email role');
+            .populate('student','name email')
+            .populate('assignedTo','name email role')
+            .populate('remarks.addedBy', 'name email role');
 
         if(!complaint){
             return res.status(404).json({message: 'Complaint not found'});

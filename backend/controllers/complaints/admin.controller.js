@@ -1,4 +1,6 @@
+// backend/controllers/complaints/admin.controller.js
 import Complaint from "../../models/complaint.model.js";
+import User from "../../models/user.model.js";
 
 export const getAllComplaints = async (req,res) => {
     try{
@@ -7,7 +9,7 @@ export const getAllComplaints = async (req,res) => {
             .populate('assignedTo', 'name email');
 
         return res.status(200).json({
-            message:'all complaints',
+            message:'All complaints retrieved successfully',
             complaints: complaints
         })
 
@@ -25,13 +27,19 @@ export const assignComplaintToStaff = async (req,res) => {
 
         const complaint = await Complaint.findById(id);
         if(!complaint){
-            return res.status(404).json({message:'complaint not found'})
+            return res.status(404).json({message:'Complaint not found'})
         }
         
-        complaint.assignedTo = staffId;
+        const staff = await User.findById(staffId);
+        if(!staff || staff.role !== "staff"){
+            return res.status(400).json({message: "Invalid staff ID"});
+        }
+        complaint.assignedTo = staff._id;
+
         await complaint.save();
+
         return res.status(200).json({
-            message:'complaint assigned to staff successfully',
+            message:'Complaint assigned to staff successfully',
             complaint: complaint
         })
     }catch(err){
@@ -46,15 +54,16 @@ export const deleteComplaint = async (req,res) => {
     try{
         const {id} = req.params;
 
-        const complaint = await Complaint.findById(id);
+        const complaint = await Complaint.findByIdAndDelete(id);
     
         if(!complaint){
-            return res.status(404).json({message:'complaint not found'})
-        }
-        await complaint.findByIdAndDelete(id);
-        
+            return res.status(404).json({
+                message:'Complaint not found'
+            })
+        }        
         return res.status(200).json({
-            message:'complaint deleted successfully'
+            message:'Complaint deleted successfully',
+            complaint: complaint
         })
 
     }catch(err){
