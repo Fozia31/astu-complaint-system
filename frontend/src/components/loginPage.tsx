@@ -1,18 +1,55 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Mail, Lock, Eye, GraduationCap, ChevronRight, HelpCircle, Info } from 'lucide-react';
+import api from '@/lib/api';
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const [formState, setFormState] = useState({ email: '', password: '' });
+    const [showPassword, setShowPassword] = useState(false);
+    const [formState, setFormState] = useState({ 
+        email: '', 
+        password: '' 
+    });
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const { email, password } = formState;
-        if (email === 'admin@astu.edu.et' && password === 'admin123') navigate('/admin');
-        else if (email === 'staff@astu.edu.et' && password === 'staff123') navigate('/staff');
-        else navigate('/student');
-    };
+        try{
+            if(!formState.email || !formState.password){
+                alert("Please fill in both email and password fields.");
+                return;
+            }else if(formState.email === 'admin@astu.edu.et' && formState.password === 'admin123'){
+                alert("Admin login successful! Redirecting to admin dashboard...");
+                navigate('/admin/dashboard');
+                return;
+             }else if(formState.email === 'staff@astu.edu.et' && formState.password === 'staff123'){
+                alert("Staff login successful! Redirecting to staff dashboard...");
+                navigate('/staff/dashboard');
+                return;
+             }
+            const res = await api.post('/auth/login', formState);
+
+            if(res.status === 200){
+                
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+
+                alert("Login successful!");
+                navigate('/student/dashboard');
+                // setFormState({ email: '', password: '' });
+            }else{
+                alert("Login failed. Please check your credentials and try again.");
+                return;
+                
+             }
+
+            }catch(error: any){
+                console.error("Login failed:", error);
+                const serverMessage = error.response?.data?.message || "Invalid credentials or server error.";
+                alert(`Login failed: ${serverMessage}`);
+
+        }
+    }
+
 
     return (
         <div className="min-h-screen w-full bg-[#f0f4f9] flex flex-col items-center justify-center p-4 font-sans">
@@ -29,7 +66,7 @@ const LoginPage = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label className="block text-xs font-bold text-slate-700 mb-2 ml-1">Email</label>
                         <div className="relative">
@@ -37,6 +74,7 @@ const LoginPage = () => {
                             <input 
                                 type="email"
                                 placeholder="username@gmail.com"
+                                required
                                 className="w-full pl-12 pr-4 py-1.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                                 value={formState.email}
                                 onChange={(e) => setFormState({...formState, email: e.target.value})}
@@ -52,21 +90,16 @@ const LoginPage = () => {
                         <div className="relative">
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input 
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
+                                required
                                 className="w-full pl-12 pr-12 py-1.5 bg-[#f8fafc] border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                                 value={formState.password}
                                 onChange={(e) => setFormState({...formState, password: e.target.value})}
                             />
-                            <Eye className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 cursor-pointer" size={18} />
+                            <Eye onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 cursor-pointer" size={18} />
                         </div>
                     </div>
-
-                    {/* <div className="flex items-center gap-2 ml-1">
-                        <input type="checkbox" id="keep-logged" className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                        <label htmlFor="keep-logged" className="text-sm text-slate-500 font-medium">Keep me logged in</label>
-                    </div> */}
-
                     <button 
                         type="submit"
                         className="w-full bg-[#2d4bbd] hover:bg-[#253da1] text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition-transform active:scale-[0.99]"
@@ -74,25 +107,8 @@ const LoginPage = () => {
                         Login <ChevronRight size={15} />
                     </button>
                 </form>
-
                 <p className="text-center mt-2 text-sm text-slate-500">Don't have an account? <a href="/register" className="text-blue-600 hover:text-blue-700 font-bold">Sign up</a></p>
-
-                {/* <div className="mt-10 pt-6 border-t border-slate-100 flex justify-center gap-6 text-[11px] font-bold text-slate-400">
-                    <span className="flex items-center gap-1.5 cursor-pointer hover:text-slate-600 uppercase tracking-tighter">
-                        <HelpCircle size={14}/> Support Center
-                    </span>
-                    <span className="flex items-center gap-1.5 cursor-pointer hover:text-slate-600 uppercase tracking-tighter">
-                        <Info size={14}/> Portal Guide
-                    </span>
-                </div> */}
             </div>
-
-            {/* <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[11px] text-slate-400 font-bold uppercase tracking-wider">
-                <a href="#" className="hover:text-blue-600 transition-colors">ASTU Website</a>
-                <a href="#" className="hover:text-blue-600 transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-blue-600 transition-colors">Terms of Service</a>
-                <a href="#" className="hover:text-blue-600 transition-colors">Student Mail</a>
-            </div> */}
         </div>
     );
 };
