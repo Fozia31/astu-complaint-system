@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from './Header';
+import Footer from './Footer';
 
 const AboutPage = () => {
   return (
@@ -37,7 +38,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* --- MISSION & VISION --- */}
       <section className="py-20 px-6 max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
@@ -72,7 +72,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* --- CORE VALUES (The System) --- */}
       <section className="py-20 bg-slate-50 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
@@ -92,7 +91,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* --- CTA SECTION --- */}
       <section className="py-24 px-6 text-center">
         <Card className="max-w-3xl mx-auto bg-white border-2 border-dashed border-amber-300 shadow-none rounded-[2rem]">
           <CardContent className="py-12">
@@ -104,12 +102,12 @@ const AboutPage = () => {
           </CardContent>
         </Card>
       </section>
+      <Footer/>
 
     </div>
   );
 };
 
-// Sub-component for the Process/Value cards
 const ValueCard = ({ icon, label, step }: { icon: React.ReactNode, label: string, step: string }) => (
   <div className="group relative bg-white p-8 rounded-3xl border border-slate-200 text-center hover:border-amber-400 hover:shadow-xl hover:shadow-amber-900/5 transition-all">
     <span className="absolute top-4 right-6 text-4xl font-black text-slate-50 opacity-10 group-hover:text-amber-400 group-hover:opacity-20 transition-all">

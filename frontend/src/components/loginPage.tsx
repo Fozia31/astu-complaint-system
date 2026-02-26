@@ -35,7 +35,6 @@ const LoginPage = () => {
 
                 alert("Login successful!");
                 navigate('/student/dashboard');
-                // setFormState({ email: '', password: '' });
             }else{
                 alert("Login failed. Please check your credentials and try again.");
                 return;

@@ -1,136 +1,140 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   User, 
   Mail, 
-  Hash, 
   ChevronRight, 
-  Globe, 
-  HelpCircle, 
-  Info,
-  Lock
+  Lock,
+  Building2,
+  Sparkles,
+  GraduationCap
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from '@/lib/api';
-import { useNavigate } from 'react-router-dom';
-
 
 const RegisterPage = () => {
     const [formState, setFormState] = React.useState({
-        fullName: '',
+        name: '',
         email: '',
-        // studentId: '',
         department: '',
         password: ''
     });
-    const navigator = useNavigate();
+    const [isLoading, setIsLoading] = React.useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
-        try{
+        setIsLoading(true);
+        try {
             const response = await api.post('/auth/sign-up', formState);
-
             if(response.status === 201){
                 alert('Registration successful! Please login to your account.');
-                navigator('/login')
-            }else{
-                alert('Registration failed. Please try again.');
+                navigate('/login');
             }
-
-        }catch(error){
+        } catch(error) {
             console.error("Registration failed:", error);
+            alert('Registration failed. Please check your details.');
+        } finally {
+            setIsLoading(false);
         }
     }
 
+    return (
+        <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4 md:p-6 font-sans">
+            <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-50/50 blur-3xl" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-slate-100 blur-3xl" />
+            </div>
 
-  return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      
-      <div className="w-full max-w-lg bg-white rounded-[2rem] shadow-2xl shadow-slate-200/60 p-4 md:p-12 border border-slate-100">
-        
-        <div className="text-center mb-5">
-          <h1 className="text-3xl font-black text-[#003366] mb-2 tracking-tight">Join ASTU CMS</h1>
-          <p className="text-slate-500 text-sm leading-relaxed max-w-[280px] mx-auto">
-            Create your institutional account to access student services and resources.
-          </p>
+            <div className="w-full max-w-[480px] bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,51,102,0.05)] p-8 md:p-12 border border-slate-100">
+                
+                <div className="text-center mb-10">
+                    <div className="inline-flex items-center justify-center w-16 h-10 rounded-2xl bg-blue-50 mb-4 text-[#1e3a8a]">
+                        <GraduationCap size={32} className="text-[#2d4bbd]" />
+                    </div>
+                    <h1 className="text-3xl font-bold text-[#001a33] tracking-tight">Create Account</h1>
+                    <p className="text-slate-500 mt-2 text-sm">
+                        Join the <span className="font-semibold text-blue-600">ASTU CMS</span> community today.
+                    </p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <div className="space-y-1.5">
+                        <label className="text-[13px] font-bold text-slate-700 ml-1">Full Name</label>
+                        <div className="relative group">
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                            <Input 
+                                placeholder="Abebe Bikila" 
+                                value={formState.name}
+                                onChange={e => setFormState({...formState, name: e.target.value})}
+                                className="pl-12 h-10 bg-slate-50/50 border-slate-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all border-none ring-1 ring-slate-200"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[13px] font-bold text-slate-700 ml-1">University Email</label>
+                        <div className="relative group">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                            <Input 
+                                type="email" 
+                                placeholder="name@astu.edu.et" 
+                                value={formState.email}
+                                onChange={e => setFormState({...formState, email: e.target.value})}
+                                className="pl-12 h-10 bg-slate-50/50 border-slate-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all border-none ring-1 ring-slate-200"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[13px] font-bold text-slate-700 ml-1">Department</label>
+                        <div className="relative group">
+                            <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                            <Input 
+                                placeholder="e.g. Software Engineering" 
+                                value={formState.department}
+                                onChange={e => setFormState({...formState, department: e.target.value})}
+                                className="pl-12 h-10 bg-slate-50/50 border-slate-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all border-none ring-1 ring-slate-200"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[13px] font-bold text-slate-700 ml-1">Password</label>
+                        <div className="relative group">
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                            <Input 
+                                type="password" 
+                                placeholder="••••••••" 
+                                value={formState.password}
+                                onChange={e => setFormState({...formState, password: e.target.value})}
+                                className="pl-12 h-10 bg-slate-50/50 border-slate-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all border-none ring-1 ring-slate-200"
+                            />
+                        </div>
+                    </div>
+
+                    <Button 
+                        type="submit" 
+                        disabled={isLoading}
+                        className="w-full bg-[#1e3a8a] hover:bg-[#162d6d] text-white h-11 rounded-2xl font-bold text-base shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-4"
+                    >
+                        {isLoading ? "Creating Account..." : "Sign Up"}
+                        {!isLoading && <ChevronRight size={19} />}
+                    </Button>
+                </form>
+
+                <div className="mt-3 text-center">
+                    <p className="text-sm text-slate-500">
+                        Already have an account?{" "}
+                        <Link to="/login" className="text-[#1e3a8a] font-bold hover:underline underline-offset-4">
+                            Log In
+                        </Link>
+                    </p>
+                </div>
+            </div>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 ml-1">Full Name</label>
-            <div className="relative">
-              <User className="absolute left-4 top-3 text-slate-400" size={18} />
-              <Input 
-                placeholder="John Doe" 
-                value={formState.fullName}
-                onChange={e => setFormState({...formState, fullName: e.target.value})}
-                className="pl-12 py-2 bg-slate-50 border-slate-200 rounded-xl focus:bg-white transition-all"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 ml-1"> Email</label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-3 text-slate-400" size={18} />
-              <Input 
-                type="email" 
-                value={formState.email}
-                onChange={e => setFormState({...formState, email: e.target.value})}
-                placeholder="student.name@astu.edu.et" 
-                className="pl-12 py-2 bg-slate-50 border-slate-200 rounded-xl focus:bg-white transition-all"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              {/* <label className="text-sm font-bold text-slate-700 ml-1">Student ID</label>
-              <div className="relative">
-                <Hash className="absolute left-4 top-3 text-slate-400" size={18} />
-                <Input 
-                  value={formState.studentId}
-                  onChange={e => setFormState({...formState, studentId: e.target.value})}
-                  placeholder="ASTU/1234/14" 
-                  className="pl-12 py-2 bg-slate-50 border-slate-200 rounded-xl focus:bg-white transition-all"
-                />
-              </div> */}
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700 ml-1">Department</label>
-              <input type="text"  
-                value={formState.department}
-                onChange={e => setFormState({...formState, department: e.target.value})}
-                className="pl-12 py-2 bg-slate-50 border-slate-200 rounded-xl focus:bg-white transition-all" placeholder="e.g., Computer Science" />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700 ml-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-3 text-slate-400" size={18} />
-              <Input 
-                type="password" 
-                value={formState.password}
-                onChange={e => setFormState({...formState, password: e.target.value})}
-                placeholder="••••••••" 
-                className="pl-12 py-2 bg-slate-50 border-slate-200 rounded-xl focus:bg-white transition-all"
-              />
-            </div>
-          </div>
-
-          <Button className="w-1/2 bg-[#1e3a8a] ml-25 hover:bg-[#172554] text-white py-6 rounded-2xl font-bold text-md shadow-lg shadow-blue-900/20 transition-all flex items-center justify-center gap-2">
-            Create Account <ChevronRight size={18} />
-          </Button>
-        </form>
-          <p className=" ml-20 text-sm text-slate-500 mt-2">Already have an account? <Link to="/login" className='font-bold hover:text-[#172554]'>Login</Link></p>
-
-      </div>
-
-    </div>
-  );
+    );
 };
 
 export default RegisterPage;

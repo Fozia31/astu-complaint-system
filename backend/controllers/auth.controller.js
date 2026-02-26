@@ -34,12 +34,12 @@ export const signUp = async (req,res) => {
         if(user){
             return res.status(400).json({message: 'User already exists'});
         }
-        const hashPassword = await bcrypt.hash(password,10);
+        
         const newUser = new User({
             name,
             email,
-            password:hashPassword,
-            role,
+            password,
+            role:role || 'student',
             department
         })
         await newUser.save();
@@ -51,6 +51,7 @@ export const signUp = async (req,res) => {
         })
 
     }catch(err){
+        console.log(err);
         res.status(500).json({message: 'Server error'});
     }
 }
