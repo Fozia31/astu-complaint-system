@@ -1,17 +1,37 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Home from '@/pages/(public)/home/page'
 import About from '@/pages/(public)/About/page'
 import Login from '@/pages/(public)/login/page'
 import Register from '@/pages/(public)/register/page'
+import DashboardLayout from './components/DashboardLayout'
+import SubmitComplaint from './components/student/SubmitComplaint'
+import ProfilePage from './components/student/Profile'
+import MyComplaints from './components/student/MyComplaints'
+import StudentDashboard from './components/student/StudentDashboard'
+import ComplaintDetail from './components/student/ComplaintDetail'
 
 const App = () => {
   return (
     <div>
       <Routes>
+        {/* public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* Student nested routes */}
+        <Route path="/student" element={<DashboardLayout />}>
+          <Route index element={<Navigate to="/student/dashboard" />} />
+          <Route path="dashboard" element={<StudentDashboard />} />
+          <Route path="submit-complaint" element={<SubmitComplaint />} />
+          <Route path="my-complaints" element={<MyComplaints />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="my-complaints/:id" element={<ComplaintDetail />} />
+        </Route> 
+
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
   )

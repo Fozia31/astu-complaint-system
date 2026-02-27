@@ -27,14 +27,15 @@ const LoginPage = () => {
                 return;
              }
             const res = await api.post('/auth/login', formState);
+            console.log("Server Response Data:", res.data.data || res.data);
 
             if(res.status === 200){
                 
                 localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.user));
+                localStorage.setItem('user', JSON.stringify(res.data.data));
 
                 alert("Login successful!");
-                navigate('/student/dashboard');
+                window.location.href = '/student/dashboard'; 
             }else{
                 alert("Login failed. Please check your credentials and try again.");
                 return;

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/categories', getAllCategories);
 
-router.post('/admin/complaints', createCategory);
+router.post('/categories', createCategory);
 
 router.put('/categories/:id', updateCategory);
 
