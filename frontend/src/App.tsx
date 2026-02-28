@@ -9,6 +9,9 @@ import ProfilePage from './components/student/Profile'
 import MyComplaints from './components/student/MyComplaints'
 import StudentDashboard from './components/student/StudentDashboard'
 import ComplaintDetail from './components/student/ComplaintDetail'
+import ManageUsers from './components/admin/StudentsList'
+import CategoryManager from './components/admin/CategoryManager'
+import AdminComplaints from './components/admin/AdminComplaints'
 
 const App = () => {
   return (
@@ -29,6 +32,14 @@ const App = () => {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="my-complaints/:id" element={<ComplaintDetail />} />
         </Route> 
+
+        <Route path="/admin" element={<DashboardLayout />}>
+          <Route index element={<Navigate to="/admin/complaints" />} />
+          <Route path="complaints" element={<AdminComplaints />} />
+          <Route path="students" element={<ManageUsers />} />
+          <Route path="categories" element={<CategoryManager />} />
+        </Route>
+  
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" />} />

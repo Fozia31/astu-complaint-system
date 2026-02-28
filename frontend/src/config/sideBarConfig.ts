@@ -22,9 +22,9 @@ export const  sidebarConfig = {
     { name: 'Profile', icon: User, path: '/profile' },
   ],
   admin: [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
-    { name: 'All Complaints', icon: ListChecks, path: '/admin/all-complaints' },
-    { name: 'Manage Users', icon: Users, path: '/admin/users' },
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
+    { name: 'All Complaints', icon: ListChecks, path: '/admin/complaints' },
+    { name: 'Manage Users', icon: Users, path: '/admin/students' },
     { name: 'Categories', icon: ShieldCheck, path: '/admin/categories' },
     { name: 'System Settings', icon: Settings, path: '/admin/settings' },
   ]
