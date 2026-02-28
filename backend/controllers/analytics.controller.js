@@ -1,36 +1,54 @@
 // controllers/analytics.controller.js
-import Complaint from "../models/complaint.model"; 
+import Complaint from "../models/complaint.model.js";
 
 export const getTotalComplaints = async (req, res) => {
-    try{
-        const totalComplaints = await Complaint.countDocuments();
-    res.status(200).json({
-        message:"Total complaints retrieved successfully",
-        totalComplaints: totalComplaints.length
-    });
-
-    }catch(error){
-        res.status(500).json({message:"Server Error",error:error.message});
+    try {
+        const totalComplaints = await Complaint.countDocuments(); // This is a number
+        res.status(200).json({
+            message: "Total complaints retrieved successfully",
+            totalComplaints: totalComplaints // Remove .length
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
 }
 
+// analytics.controller.js
+
 export const getResolutionRate = async (req, res) => {
-    try{
-        const totalComplaints = await Complaint.countDocuments();
-        const resolvedComplaints = await Complaint.countDocuments({ status: "resolved" });
-
-
-        const resolutionRate = totalComplaints > 0 ? (resolvedComplaints / totalComplaints * 100) : 0;
+    try {
+        const total = await Complaint.countDocuments();
+        const resolved = await Complaint.countDocuments({ status: "resolved" });
+        // Ensure we send a field named 'resolutionRate'
+        const rate = total > 0 ? (resolved / total * 100) : 0;
 
         res.status(200).json({
-            message:"Resolution rate retrieved successfully",
-            resolutionRate: resolutionRate
+            message: "Success",
+            resolutionRate: rate // This must match the frontend key
         });
+    } catch (error) {
+        res.status(500).json({ message: "Error", error: error.message });
+    }
+}
 
+export const getAverageResolutionTime = async (req, res) => {
+    try {
+        const avg = await Complaint.aggregate([
+            { $match: { status: "resolved" } },
+            {
+                $group: {
+                    _id: null,
+                    avgTime: { $avg: { $divide: [{ $subtract: ["$resolvedAt", "$createdAt"] }, 86400000] } }
+                }
+            }
+        ]);
 
-
-    }catch(error){
-        res.status(500).json({message:"Server Error",error:error.message});
+        res.status(200).json({
+            message: "Success",
+            averageResolutionTime: avg[0]?.avgTime || 0 // Ensure this key exists
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Error", error: error.message });
     }
 }
 
@@ -93,34 +111,3 @@ export const getMonthlyComplaints = async (req, res) => {
     }
 }
 
-export const getAverageResolutionTime = async (req, res) => {
-    try{
-        const avgResolutionTime = await Complaint.aggregate([
-            { $match: { status: "resolved" } },
-            {
-                $project: {
-                    getAverageResolutionTime: {
-                        $divide: [
-                            { $subtract: ["$resolvedAt", "$createdAt"] },
-                            1000 * 60 * 60 * 24
-                        ]
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    averageResolutionTime: { $avg: "$getAverageResolutionTime" }
-                }
-            }
-        ]);
-
-        return res.status(200).json({
-            message:"Average resolution time retrieved successfully",
-            averageResolutionTime: avgResolutionTime[0] ? avgResolutionTime[0].averageResolutionTime : 0
-        });
-     
-    }catch(error){
-        res.status(500).json({message:"Server Error",error:error.message});
-    }
-}
