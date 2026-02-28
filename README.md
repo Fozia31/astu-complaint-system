@@ -1,169 +1,150 @@
-# ASTU Complaint Management System
+# 🎓 ASTU Complaint Management System
 
-A full-stack web-based Complaint Management System developed for Adama Science and Technology University (ASTU).
+A full-stack web-based Complaint Management System developed for **Adama Science and Technology University (ASTU)**.
 
----
-
-## Project Overview
-
-This system allows:
-- Students to submit and track complaints
-- Staff to manage assigned complaints
-- Admin to manage users, categories, and system analytics
+This platform enables students to submit complaints, staff members to manage assigned cases, and administrators to monitor and control the entire system efficiently.
 
 ---
 
-## System Roles
+## 🌐 Overview
 
-### Student
-- Register / Login
-- Create Complaint
-- View My Complaints
-- View Complaint Details
-- Chat with Staff
-- Update Profile
+The ASTU Complaint Management System is designed to:
 
-### Staff
-- View Assigned Complaints
-- Respond to Complaints
-- Update Complaint Status
-- View Dashboard Statistics
-- Update Profile
-
-### Admin
-- View All Complaints
-- Manage Users
-- Manage Categories
-- View Analytics Dashboard
-- Update Profile
+- Provide a structured and transparent complaint process
+- Improve communication between students and staff
+- Track complaint status in real-time
+- Enable role-based system management
+- Deliver a clean institutional user interface
 
 ---
 
-## Tech Stack
+## 👥 System Roles
 
-Frontend:
-- React (Vite)
+### 👨‍🎓 Student
+- Register & Login
+- Submit new complaints
+- View personal complaint history
+- Track complaint status
+- Chat with assigned staff
+- Manage profile
+
+### 👨‍🏫 Staff
+- View assigned complaints
+- Respond to student messages
+- Update complaint status
+- Access dashboard statistics
+- Manage profile
+
+### 👨‍💼 Admin
+- View all system complaints
+- Manage users (Student / Staff / Admin)
+- Manage complaint categories
+- Access analytics dashboard
+- Monitor system activity
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js (Vite)
 - Tailwind CSS
 - React Router
 - Axios
 
-Backend:
+### Backend
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
 - JWT Authentication
+- bcrypt (password hashing)
 
 ---
 
-## Project Structure
-
-astu-complaint-system/
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── hooks/
-│   │   ├── context/
-│   │   └── routes/
-│   └── package.json
-│
-├── backend/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── config/
-│   └── server.js
-│
-└── README.md
-
 ---
 
-## API Endpoints
+## 🔐 API Endpoints
 
 ### Complaint Routes
-POST   /api/complaints
-GET    /api/complaints/my
-GET    /api/complaints/:id
-PUT    /api/complaints/:id/status
-POST   /api/complaints/:id/message
 
-### Auth Routes
-POST   /api/auth/register
-POST   /api/auth/login
+
+POST /api/complaints
+GET /api/complaints/my
+GET /api/complaints/:id
+PUT /api/complaints/:id/status
+POST /api/complaints/:id/message
+
+### Authentication Routes
+POST /api/auth/register
+POST /api/auth/login
+
 
 ---
 
-## Installation Guide
+## ⚙️ Installation Guide
 
-### Clone Repository
+### 1️⃣ Clone Repository
+
+```bash
 git clone https://github.com/your-username/astu-complaint-system.git
 cd astu-complaint-system
 
----
+### 2️⃣ Backend Setup
 
-### Backend Setup
 cd backend
 npm install
 
-Create .env file and add:
-
-PORT=5000
+create a .env file with the following content:
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-
-Run backend:
+JWT_SECRET=your_jwt_secret_key
+port=5000
 npm run dev
+backend server should now be running on http://localhost:5000
 
----
-
-### Frontend Setup
+### 3️⃣ Frontend Setup
 cd frontend
 npm install
 npm run dev
+frontend should now be running on http://localhost:5173
 
-Frontend:
-http://localhost:5173
+Design System
 
-Backend:
-http://localhost:5000
+Institutional Deep Blue & Gold theme
+Shared Navbar & Sidebar layout
+Role-based dashboard interface
+Consistent spacing and typography
+Clean academic UI design
 
----
+🔒 Security Features
 
-## Features
+Password hashing with bcrypt
 
-- Role-based Authentication
-- Protected Routes
-- Complaint Tracking System
-- Admin Dashboard
-- Category Management
-- User Management
-- Clean Institutional UI
+JWT-based authentication
 
----
+Role-based authorization middleware
 
-## Security
+Protected API routes
 
-- Password hashing (bcrypt)
-- JWT Authentication
-- Role-based Authorization
+📊 Core Features
 
----
+Role-based access control
+Complaint status tracking
+Staff-student conversation system
+Admin analytics dashboard
+Category management
+User management
 
-## Future Improvements
+🚀 Future Improvements
+Email notification system
+File upload support
+Real-time chat (WebSocket)
+AI-assisted complaint writing
+Advanced reporting system
 
-- Email Notifications
-- File Upload Support
-- Real-time Chat (WebSocket)
-- AI-assisted Complaint Writing
+👩‍💻 Developer
 
----
+Fozia Damtew
+Computer Science Student
+Adama Science and Technology University
 
-## Developer
-
-Fozia Damtew  
-Software Engineering Student  
-Adama Science and Technology University  
