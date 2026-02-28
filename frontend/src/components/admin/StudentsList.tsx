@@ -19,7 +19,6 @@ const StudentsList = () => {
     try {
       setLoading(true);
       const response = await api.get('/users');
-      // Assuming your backend returns { data: [...] }
       setUsers(response.data.data || response.data);
     } catch (error) {
       console.error("Error fetching users:", error);

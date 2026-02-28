@@ -2,9 +2,14 @@ import './loadEnv.js';
 import express from 'express';
 import authRoutes from './routes/auth.route.js';
 import studentComplaintRoutes from './routes/complaint/student.route.js';
+import adminComplaintRoutes from './routes/complaint/admin.route.js';
 import categoryRoutes from './routes/categories.route.js';
+import userRoutes from './routes/user.route.js';
+import analyticsRoutes from './routes/analytics.route.js';
+import staffComplaintRoutes from './routes/complaint/staff.route.js';
 import { connectDB } from './config/db.js';
 import cors from 'cors';
+import { seedAdmin } from './utils/seeder.js';
 
 const corsOptions = {
     origin: 'http://localhost:5173', 
@@ -26,12 +31,17 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api', studentComplaintRoutes);
 app.use('/api', categoryRoutes);
+app.use('/api', userRoutes);
+app.use('/api',analyticsRoutes);
+app.use('/api',adminComplaintRoutes);
+app.use('/api',staffComplaintRoutes)
 
 
 const startServer = () =>{
     app.listen(PORT,async()=>{
         console.log(`Server is running on port http://localhost:${PORT}`);
         await connectDB();
+        await seedAdmin();
     })
 }
 startServer();

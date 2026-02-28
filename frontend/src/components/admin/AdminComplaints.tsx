@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Calendar, MoreVertical, CheckCircle, Clock, AlertCircle, UserCheck, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Added for navigation
+import { Search, Calendar, Loader2, AlertCircle } from 'lucide-react';
 import api from '@/lib/api';
 
 const AdminComplaints = () => {
+  const navigate = useNavigate(); // Initialize navigate
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All Statuses'); // Added status filter state
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchComplaints();
@@ -14,94 +18,104 @@ const AdminComplaints = () => {
   const fetchComplaints = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/complaints');
-      setComplaints(response.data.data || response.data);
-    } catch (error) {
+      setError(null);
+      const response = await api.get('/admin/complaints'); 
+      setComplaints(response.data.complaints || []);
+    } catch (error: any) {
       console.error("Error fetching admin complaints:", error);
+      setError("Failed to load grievances. Please check your admin permissions.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAssign = async (id: string, staffId: string) => {
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this complaint?")) return;
     try {
-      await api.patch(`/complaints/${id}/assign`, { assignedTo: staffId });
-      fetchComplaints(); // Refresh list
+      await api.delete(`/admin/complaints/${id}`);
+      fetchComplaints();
     } catch (error) {
-      alert("Failed to assign complaint");
+      alert("Error deleting complaint");
     }
   };
 
-  const filtered = complaints.filter((c: any) => 
-    c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    c.student?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // FIXED SEARCH & FILTER LOGIC
+  const filtered = complaints.filter((c: any) => {
+    const matchesSearch = 
+      c.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      c.student?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.student?.email?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus = 
+      statusFilter === 'All Statuses' || 
+      c.status?.toLowerCase() === statusFilter.toLowerCase();
+
+    return matchesSearch && matchesStatus;
+  });
+
+  if (loading) return (
+    <div className="flex h-96 items-center justify-center">
+      <Loader2 className="animate-spin text-[#003366]" size={40} />
+    </div>
   );
 
   return (
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <h1 className="text-2xl font-bold text-[#001a33]">Student Grievances</h1>
-        <button className="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl border border-orange-100 font-bold text-sm flex items-center gap-2 hover:bg-orange-100 transition-all">
-          <Calendar size={16} /> Export Report
-        </button>
+        {error && <span className="text-red-500 text-sm flex items-center gap-1"><AlertCircle size={14}/> {error}</span>}
       </div>
 
-      {/* Filter Bar from Image */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <select className="h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm outline-none font-medium">
-          <option>All Statuses</option>
-          <option>Pending</option>
-          <option>In Progress</option>
-          <option>Resolved</option>
+        {/* Added value and onChange for Status Filter */}
+        <select 
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm outline-none font-medium"
+        >
+          <option value="All Statuses">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="resolved">Resolved</option>
+          <option value="in-progress">In Progress</option>
         </select>
-        <select className="h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm outline-none font-medium">
-          <option>All Categories</option>
-        </select>
-        <div className="relative">
-           <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-           <input type="text" placeholder="Select Date Range" className="w-full pl-10 h-11 bg-white border border-slate-200 rounded-xl text-sm outline-none" />
-        </div>
-        <div className="relative">
+        
+        <div className="relative md:col-span-2">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input 
-            placeholder="Search by student or title..." 
+            placeholder="Search by student name, email or title..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 h-11 bg-white border border-slate-200 rounded-xl text-sm outline-none" 
           />
         </div>
+        <button className="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl border border-orange-100 font-bold text-sm flex items-center justify-center gap-2 hover:bg-orange-100 transition-all">
+          <Calendar size={16} /> Export
+        </button>
       </div>
 
-      {/* Complaints Table */}
       <div className="bg-white rounded-[1.5rem] border border-slate-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-slate-50/50 border-b border-slate-100">
               <tr>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Student Name</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Student</th>
                 <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Title</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Assigned To</th>
                 <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                 <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</th>
-                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Action</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {filtered.map((item: any) => (
+              {filtered.length > 0 ? filtered.map((item: any) => (
                 <tr key={item._id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600">
-                        {item.student?.name?.split(' ').map((n:any)=>n[0]).join('')}
-                      </div>
-                      <span className="text-sm font-bold text-slate-700">{item.student?.name}</span>
-                    </div>
+                    <p className="text-sm font-bold text-slate-700">{item.student?.name || 'Unknown'}</p>
+                    <p className="text-[10px] text-slate-400 font-medium">{item.student?.email}</p>
                   </td>
                   <td className="px-6 py-5 text-sm text-slate-600 font-medium">{item.title}</td>
-                  <td className="px-6 py-5">
-                    <span className="text-[10px] font-bold px-2 py-1 bg-slate-100 rounded-md text-slate-500 uppercase">
-                      {item.category?.name || 'General'}
-                    </span>
+                  <td className="px-6 py-5 text-xs text-slate-500 italic">
+                    {item.assignedTo?.name || "Unassigned"}
                   </td>
                   <td className="px-6 py-5">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
@@ -111,12 +125,32 @@ const AdminComplaints = () => {
                       {item.status}
                     </span>
                   </td>
-                  <td className="px-6 py-5 text-xs text-slate-400 font-bold">{new Date(item.createdAt).toLocaleDateString()}</td>
-                  <td className="px-6 py-5">
-                    <button className="text-orange-600 text-xs font-black uppercase tracking-tighter hover:underline">View Details</button>
+                  <td className="px-6 py-5 text-xs text-slate-400 font-bold">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-5 flex justify-center gap-3">
+                    {/* UPDATED VIEW BUTTON */}
+                    <button 
+                      onClick={() => navigate(`/admin/complaints/${item._id}`)}
+                      className="text-orange-600 text-[10px] font-black uppercase hover:underline"
+                    >
+                      View
+                    </button>
+                    <button 
+                       onClick={() => handleDelete(item._id)}
+                       className="text-red-500 text-[10px] font-black uppercase hover:underline"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                   <td colSpan={6} className="px-6 py-10 text-center text-slate-400 text-sm italic">
+                     No complaints found matching your criteria.
+                   </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
