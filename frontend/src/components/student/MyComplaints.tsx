@@ -1,13 +1,17 @@
-import { useEffect, useState, useMemo } from 'react';
-import { Search, Filter, Clock, Loader2, Inbox, Eye, X } from 'lucide-react';
+import { useEffect, useState, useMemo, useRef } from 'react';
+import { Search, Filter, Clock, Loader2, Inbox, Eye, X, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '@/lib/api';
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(''); // Search State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [uploading, setUploading] = useState(false); // State for AI upload
   const navigate = useNavigate();
+  
+  // Ref for the hidden file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -25,7 +29,40 @@ const MyComplaints = () => {
     fetchComplaints();
   }, []);
 
-  // --- Functional Search Logic ---
+  // --- Logic to handle AI Policy Upload ---
+  const handlePolicyUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Optional: Check file type
+    if (file.type !== "application/pdf") {
+      alert("Please upload a PDF file for the AI to read.");
+      return;
+    }
+
+    try {
+      setUploading(true);
+      
+      // Note: Since your backend 'upload-doc' expects a URL, 
+      // in a real app, you'd upload to Firebase/S3 first.
+      // For testing, we send the ASTU Legislation link you have.
+      const payload = {
+        fileName: file.name,
+        fileUrl: "https://www.astu.edu.et/images/mg312022pho/ASTU_legislation_-August_2017_edited.pdf"
+      };
+
+      await api.post('/chatbot/upload-doc', payload);
+      alert("AI Assistant updated! It has now read the legislation document.");
+      
+    } catch (error: any) {
+      console.error("AI Upload Error:", error);
+      alert("Failed to update AI context: " + error.message);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = ""; // Reset input
+    }
+  };
+
   const filteredComplaints = useMemo(() => {
     return complaints.filter((item: any) => 
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -35,7 +72,16 @@ const MyComplaints = () => {
 
   return (
     <div className="animate-in fade-in duration-500">
-      {/* HEADER SECTION (Original Bold Style) */}
+      {/* HIDDEN FILE INPUT */}
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handlePolicyUpload} 
+        className="hidden" 
+        accept=".pdf"
+      />
+
+      {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[#001a33]">My Complaints</h1>
@@ -43,6 +89,20 @@ const MyComplaints = () => {
         </div>
         
         <div className="flex gap-3">
+          {/* UPLOAD BUTTON (Triggers hidden input) */}
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="h-11 px-4 bg-[#001a33] text-white rounded-xl flex items-center gap-2 text-sm font-semibold hover:bg-slate-800 transition-all shadow-md disabled:opacity-50"
+          >
+            {uploading ? (
+              <Loader2 className="animate-spin" size={18} />
+            ) : (
+              <Upload size={18} className="text-orange-500" />
+            )}
+            {uploading ? "AI Reading..." : "Update AI Context"}
+          </button>
+
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
@@ -66,7 +126,7 @@ const MyComplaints = () => {
         </div>
       </div>
 
-      {/* TABLE SECTION (Original Rounded Card Style) */}
+      {/* TABLE SECTION */}
       <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
