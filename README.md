@@ -1,4 +1,3 @@
-cat << 'EOF' > README.md
 # 🎓 ASTU Complaint Management System
 
 <p align="center">
