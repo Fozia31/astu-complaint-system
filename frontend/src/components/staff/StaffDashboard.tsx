@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ListChecks, Clock, CheckCircle2, Eye } from 'lucide-react';
+import { ListChecks, Clock, CheckCircle2, Eye, UserCheck } from 'lucide-react';
 import api from '@/lib/api';
 
 const StaffDashboard = () => {
@@ -64,6 +64,8 @@ const StaffDashboard = () => {
                 <th className="px-6 py-4">Title</th>
                 <th className="px-6 py-4">Category</th>
                 <th className="px-6 py-4">Status</th>
+                {/* NEW COLUMN HEADER */}
+                <th className="px-6 py-4">Assigned To</th>
                 <th className="px-6 py-4">Date</th>
                 <th className="px-6 py-4">Action</th>
               </tr>
@@ -84,6 +86,17 @@ const StaffDashboard = () => {
                          c.status === 'resolved' ? 'bg-emerald-100 text-emerald-600' : 'bg-orange-100 text-orange-600'
                        }`}>{c.status}</span>
                     </td>
+                    {/* NEW COLUMN CELL */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">
+                          <UserCheck size={12} className="text-slate-500" />
+                        </div>
+                        <span className="text-slate-700 font-medium">
+                          {c.assignedTo?.name || 'Unassigned'}
+                        </span>
+                      </div>
+                    </td>
                     <td className="px-6 py-4 text-slate-500 text-xs">
                       {c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', {
                         month: 'short',
@@ -103,8 +116,8 @@ const StaffDashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-400 italic">
-                    No complaints assigned to your account yet.
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-400 italic">
+                    No complaints available in the system yet.
                   </td>
                 </tr>
               )}
