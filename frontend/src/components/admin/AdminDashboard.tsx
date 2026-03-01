@@ -6,10 +6,8 @@ import {
 } from 'recharts';
 import api from '@/lib/api';
 
-// 1. New Vibrant Palette
 const COLORS = ['#10b981', '#8b5cf6', '#f59e0b', '#3b82f6', '#ef4444'];
 
-// Type Definitions
 interface DashboardStats {
   totalComplaints: number;
   resolutionRate: number;
@@ -81,7 +79,6 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 p-6 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-      {/* Header */}
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-4xl font-black text-slate-900 tracking-tight">Analytics Overview</h2>
@@ -95,7 +92,6 @@ const AdminDashboard: React.FC = () => {
         </button>
       </div>
 
-      {/* 1. STAT CARDS */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Total Complaints" val={stats.totalComplaints} color="text-blue-600" bg="bg-blue-50" icon={FileText} />
         <StatCard title="Resolution Rate" val={`${stats.resolutionRate.toFixed(1)}%`} color="text-emerald-600" bg="bg-emerald-50" icon={CheckCircle} />
@@ -104,7 +100,6 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* 2. PIE CHART */}
         <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow h-[500px]">
           <h3 className="text-[11px] font-black text-slate-400 mb-8 uppercase tracking-[0.25em]">Distribution by Category</h3>
           <ResponsiveContainer width="100%" height="85%">
@@ -131,7 +126,6 @@ const AdminDashboard: React.FC = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* 3. BAR CHART WITH GRADIENT */}
         <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow h-[500px]">
           <h3 className="text-[11px] font-black text-slate-400 mb-8 uppercase tracking-[0.25em]">Monthly Growth Trend</h3>
           <ResponsiveContainer width="100%" height="85%">

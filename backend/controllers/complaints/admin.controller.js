@@ -47,13 +47,11 @@ export const assignComplaintToStaff = async (req, res) => {
             return res.status(400).json({ message: "Invalid staff ID" });
         }
 
-        // Assign and Update Status
         complaint.assignedTo = staff._id;
-        complaint.status = "In-Progress"; // Automatically move to in-progress when assigned
+        complaint.status = "In-Progress"; 
 
         await complaint.save();
 
-        // CRITICAL: Re-populate so frontend knows the name of the assigned staff member
         await complaint.populate('assignedTo', 'name email');
 
         return res.status(200).json({

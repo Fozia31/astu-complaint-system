@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import api from '@/lib/api';
 
 const ProfilePage = () => {
-  // 1. Local State for User Data
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -13,13 +12,11 @@ const ProfilePage = () => {
     campusAddress: ''
   });
 
-  // 2. Load User on Mount
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
-      // Initialize form with existing data
       setFormData({
         department: parsedUser.department || 'Software Engineering',
         campusAddress: parsedUser.campusAddress || ''
@@ -27,19 +24,15 @@ const ProfilePage = () => {
     }
   }, []);
 
-  // 3. Handle Form Changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 4. Update Backend
   const handleUpdateProfile = async () => {
     setLoading(true);
     try {
-      // Assuming your backend has an endpoint: PUT /api/student/profile
       const response = await api.put('/student/profile', formData);
       
-      // Update local storage with new data so sidebar/dashboard update too
       const updatedUser = { ...user, ...formData };
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
@@ -65,7 +58,6 @@ const ProfilePage = () => {
       <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 md:p-12 mb-6">
         <div className="flex flex-col md:flex-row gap-12">
           
-          {/* Avatar Section */}
           <div className="flex flex-col items-center">
             <div className="relative group cursor-pointer">
               <div className="w-40 h-40 rounded-2xl bg-[#eef4ff] overflow-hidden border-4 border-white shadow-md">
@@ -84,7 +76,6 @@ const ProfilePage = () => {
             </p>
           </div>
 
-          {/* Form Fields */}
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-xs font-bold text-[#001a33] uppercase tracking-wider">Full Name</label>
@@ -142,7 +133,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Privacy Notice */}
       <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 flex gap-4">
         <Info size={20} className="text-blue-600 shrink-0" />
         <p className="text-xs text-slate-500 leading-relaxed">

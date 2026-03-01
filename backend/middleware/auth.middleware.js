@@ -20,7 +20,6 @@ export const authMiddleware = async (req, res, next) => {
         console.log("VERIFYING SECRET:", process.env.JWT_SECRET);
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
-        // Ensure the token payload actually contains the ID
         const userId = decoded.id || decoded._id; 
         
         const user = await User.findById(userId).select('-password');
@@ -34,7 +33,6 @@ export const authMiddleware = async (req, res, next) => {
 
     } catch (err) {
         console.error("JWT Error:", err.message);
-        // This will now tell you if it's 'invalid signature' or 'jwt expired'
         res.status(401).json({ message: 'Invalid token' });
     }
 }

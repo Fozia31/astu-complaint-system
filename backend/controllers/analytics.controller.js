@@ -1,10 +1,7 @@
 import Complaint from "../models/complaint.model.js";
 import User from "../models/user.model.js";
 
-/**
- * Main Optimized Dashboard Summary
- * Fetches all stats in parallel for the frontend dashboard
- */
+
 export const getDashboardStats = async (req, res) => {
     try {
         const [
@@ -60,9 +57,7 @@ export const getDashboardStats = async (req, res) => {
     }
 };
 
-/**
- * Individual Analytics Helpers
- */
+
 export const getTotalComplaints = async (req, res) => {
     try {
         const count = await Complaint.countDocuments();

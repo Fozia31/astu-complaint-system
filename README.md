@@ -1,183 +1,161 @@
 # 🎓 ASTU Complaint Management System
 
-A full-stack, role-based Complaint Management System developed for Adama Science and Technology University (ASTU).
+<p align="center">
+  <b>A Full-Stack Role-Based Complaint Management Platform</b><br>
+  Developed for <b>Adama Science and Technology University (ASTU)</b>
+</p>
 
-This platform streamlines the complaint submission and resolution process by enabling structured communication between students, staff members, and administrators — now enhanced with an AI-powered assistant using Retrieval-Augmented Generation (RAG).
-
----
-
-## 🌐 Overview
-
-The ASTU Complaint Management System is designed to:
-
-- Provide a structured and transparent complaint handling process
-- Improve communication between students and university staff
-- Track complaint status in real-time
-- Enable role-based access control
-- Deliver a clean institutional user interface
-- Assist users with AI-powered complaint writing and guidance
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge&logo=node.js" />
+  <img src="https://img.shields.io/badge/Database-MongoDB-darkgreen?style=for-the-badge&logo=mongodb" />
+  <img src="https://img.shields.io/badge/Auth-JWT-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/AI-RAG-purple?style=for-the-badge" />
+</p>
 
 ---
 
-## 👥 User Roles & Permissions
+## 🌟 Project Overview
+
+The **ASTU Complaint Management System** is a modern web-based platform designed to optimize the complaint handling process within the university.  
+
+It ensures transparency, structured communication, and efficient case resolution — enhanced with an **AI-powered Assistant using Retrieval-Augmented Generation (RAG)**.
+
+---
+
+# ✨ Why This Project?
+
+✅ Structured & transparent complaint workflow  
+✅ Real-time status tracking  
+✅ Secure role-based access control  
+✅ Smart AI-assisted complaint writing  
+✅ Clean institutional UI design  
+
+---
+
+# 👥 User Roles
 
 ### 👨‍🎓 Student
-- Register & Login securely
-- Submit new complaints
-- View personal complaint history
-- Track complaint status in real-time
-- Chat with assigned staff
-- Use AI assistant to improve complaint clarity
-- Manage personal profile
+- Secure registration & login  
+- Submit complaints  
+- Track complaint status  
+- View complaint history  
+- Chat with assigned staff  
+- AI-powered complaint improvement  
+- Profile management  
 
 ### 👨‍🏫 Staff
-- View assigned complaints
-- Respond to student messages
-- Update complaint status
-- Access dashboard statistics
-- Manage profile
+- View assigned complaints  
+- Respond to students  
+- Update complaint status  
+- Access dashboard analytics  
+- Profile management  
 
 ### 👨‍💼 Admin
-- View and manage all complaints
-- Manage users (Students / Staff / Admins)
-- Manage complaint categories
-- Access analytics dashboard
-- Monitor system-wide activity
+- Monitor all system complaints  
+- Manage users (Student / Staff / Admin)  
+- Manage complaint categories  
+- Access system analytics  
+- Monitor platform activity  
 
 ---
 
-## 🤖 AI Assistant (RAG-Based)
+# 🤖 AI Assistant (RAG-Based)
 
-The system includes an AI Assistant powered by Retrieval-Augmented Generation (RAG).
+### 🧠 Intelligent Complaint Support
+The system integrates an AI assistant built with **Retrieval-Augmented Generation (RAG)**.
 
-### 🔎 What It Does
-- Helps students write clearer and more structured complaints
-- Retrieves relevant university policies or similar past cases
-- Provides intelligent suggestions before submission
-- Improves complaint quality and processing efficiency
+### 🔎 Capabilities
+- Improves complaint clarity and structure  
+- Retrieves relevant university policies  
+- Suggests better wording before submission  
+- Reduces incomplete or unclear cases  
 
 ### ⚙️ How It Works
-1. Retrieves relevant contextual data (policies, FAQs, previous complaints)
-2. Sends context + user input to the LLM
-3. Generates accurate, context-aware responses
-
-### 🧠 Benefits
-- Reduces incomplete or unclear complaints
-- Speeds up complaint resolution
-- Improves overall communication quality
+1. Retrieves relevant documents (policies, FAQs, similar complaints)  
+2. Combines retrieved context with user input  
+3. Generates context-aware responses using an LLM  
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Technology Stack
 
-### 🎨 Frontend
-- React.js (Vite)
-- Tailwind CSS
-- React Router
-- Axios
+## 🎨 Frontend
+- React.js (Vite)  
+- Tailwind CSS  
+- React Router  
+- Axios  
 
-### 🖥️ Backend
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT Authentication
-- bcrypt (Password Hashing)
+## 🖥️ Backend
+- Node.js  
+- Express.js  
+- MongoDB  
+- Mongoose  
+- JWT Authentication  
+- bcrypt (Password Hashing)  
 
-### 🤖 AI Integration
-- Retrieval-Augmented Generation (RAG)
-- Vector-based document retrieval
-- LLM-powered response generation
-
----
-
-## 🔐 API Endpoints
-
-### Complaint Routes
-POST   /api/complaints  
-GET    /api/complaints/my  
-GET    /api/complaints/:id  
-PUT    /api/complaints/:id/status  
-POST   /api/complaints/:id/message  
-
-### Authentication Routes
-POST   /api/auth/register  
-POST   /api/auth/login  
+## 🤖 AI Layer
+- Retrieval-Augmented Generation (RAG)  
+- Vector-based document retrieval  
+- LLM-powered response generation  
 
 ---
 
-## ⚙️ Installation Guide
+# 🔐 Security Features
+
+- 🔒 Password hashing with bcrypt  
+- 🔑 JWT-based authentication  
+- 🛡️ Role-based authorization middleware  
+- 🚫 Protected API routes  
+- 🔐 Secure environment configuration  
+
+---
+
+# 📊 Core Features
+
+- Complaint lifecycle tracking  
+- Staff–student messaging system  
+- Admin analytics dashboard  
+- Category management  
+- User management  
+- AI-powered complaint assistant  
+- Email notification system  
+- File upload support  
+
+---
+
+# ⚙️ Installation
 
 ### 1️⃣ Clone Repository
+```bash
 git clone https://github.com/Fozia31/astu-complaint-system.git
-cd astu-complaint-system  
+cd astu-complaint-system
 
----
+2️⃣ Backend Setup
+cd backend
+npm install
 
-### 2️⃣ Backend Setup
-cd backend  
-npm install  
-
-Create a .env file:
-
-MONGO_URI=your_mongodb_connection_string  
-JWT_SECRET=your_jwt_secret_key  
-PORT=5000  
+Create .env file:
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+PORT=5000
 
 Run backend:
-npm run dev  
+npm run dev
+Backend → http://localhost:5000
 
-Backend runs at:
-http://localhost:5000  
+3️⃣ Frontend Setup
+cd frontend
+npm install
+npm run dev
 
----
+Frontend → http://localhost:5173
 
-### 3️⃣ Frontend Setup
-cd frontend  
-npm install  
-npm run dev  
+🎨 Design System
 
-Frontend runs at:
-http://localhost:5173  
+🎓 Institutional Deep Blue & Gold theme
+📐 Shared Navbar & Sidebar layout
+📊 Role-based dashboards
+✨ Clean academic interface
+📏 Consistent spacing & typography
 
----
-
-## 🎨 Design System
-
-- Institutional Deep Blue & Gold theme
-- Shared Navbar & Sidebar layout
-- Role-based dashboard interfaces
-- Clean academic UI design
-- Consistent spacing and typography
-
----
-
-## 🔒 Security Features
-
-- Password hashing with bcrypt
-- JWT-based authentication
-- Role-based authorization middleware
-- Protected API routes
-- Secure environment configuration
-
----
-
-## 📊 Core Features
-
-- Role-based access control
-- Complaint lifecycle tracking
-- Staff–student conversation system
-- Admin analytics dashboard
-- Category management
-- User management
-- AI-powered complaint assistant (RAG)
-- Email notification system
-- File upload support
-
----
-
-## 👩‍💻 Developer
-
-Fozia Damtew  
-Computer Science Student  
-Adama Science and Technology University

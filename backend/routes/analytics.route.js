@@ -13,7 +13,6 @@ import { authorizeRoles } from '../middleware/role.middleware.js';
 
 const router = express.Router();
 
-// Optimized route for Admin Dashboard
 router.get(
     '/analytics/dashboard-summary', 
     authMiddleware, 
@@ -21,7 +20,6 @@ router.get(
     getDashboardStats
 );
 
-// Individual routes for specific data refreshes
 router.get('/analytics/total', authMiddleware, authorizeRoles("admin"), getTotalComplaints);
 router.get('/analytics/resolution-rate', authMiddleware, authorizeRoles("admin"), getResolutionRate);
 router.get('/analytics/by-category', authMiddleware, authorizeRoles("admin"), getComplaintsByCategory);

@@ -1,22 +1,17 @@
 import Complaint from '../../models/complaint.model.js';
 import mongoose from 'mongoose';
 
-/**
- * 1. Fetch All Student Complaints (Removed assignedTo restriction)
- */
+
 export const getAssignedComplaints = async (req, res) => {
     try {
         const { status, search } = req.query;
 
-        // Build dynamic query - Now looking at ALL complaints
         let query = {}; 
 
-        // Filter by status if not 'all'
         if (status && status !== 'all') {
             query.status = status;
         }
 
-        // Search by title or student info
         if (search) {
             query.$or = [
                 { title: { $regex: search, $options: 'i' } },
@@ -35,14 +30,11 @@ export const getAssignedComplaints = async (req, res) => {
     }
 };
 
-/**
- * 2. Get Single Detail (Removed assignedTo restriction)
- */
+
 export const getComplaintById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Find any complaint by ID regardless of who it is assigned to
         const complaint = await Complaint.findById(id)
             .populate('student', 'name email department')
             .populate('category', 'name')
@@ -56,9 +48,7 @@ export const getComplaintById = async (req, res) => {
     }
 };
 
-/**
- * 3. Update Status (Removed assignedTo restriction)
- */
+
 export const updateComplaintStatus = async (req, res) => {
     try {
         const { id } = req.params;
@@ -86,9 +76,7 @@ export const updateComplaintStatus = async (req, res) => {
     }
 };
 
-/**
- * 4. Add Remarks (Removed assignedTo restriction)
- */
+
 export const addComplaintRemarks = async (req, res) => {
     try {
         const { id } = req.params;
@@ -100,7 +88,6 @@ export const addComplaintRemarks = async (req, res) => {
         const complaint = await Complaint.findById(id);
         if (!complaint) return res.status(404).json({ message: 'Complaint not found' });
 
-        // Add remark and ensure the ticket is assigned to this staff
         complaint.remarks.push({ message: message.trim(), addedBy: staffId });
         complaint.assignedTo = staffId; 
         
@@ -116,12 +103,9 @@ export const addComplaintRemarks = async (req, res) => {
     }
 };
 
-/**
- * 5. Dashboard Summary (Global Staff Stats)
- */
+
 export const getStaffDashboardSummary = async (req, res) => {
     try {
-        // Stats for ALL complaints in the system
         const stats = await Complaint.aggregate([
             { 
                 $group: { 

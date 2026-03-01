@@ -3,7 +3,6 @@ import ChatbotDocument from "../models/chatbotDocument.model.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import axios from "axios";
 
-// Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const uploadDocument = async (req, res) => {
@@ -18,7 +17,6 @@ export const uploadDocument = async (req, res) => {
         const parsedPdf = await pdf(dataBuffer); 
         const extractedText = parsedPdf.text;
 
-        // UPDATED: Stable 2026 Embedding model
         const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
         
         const result = await model.embedContent({
@@ -43,7 +41,6 @@ export const uploadDocument = async (req, res) => {
 };
 
 export const generateAnswer = async (question, userId) => {
-    // UPDATED: Use gemini-embedding-001 with 768 dimensions
     const embedModel = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
     const embedResult = await embedModel.embedContent({
         content: { parts: [{ text: question }] },
@@ -68,8 +65,6 @@ export const generateAnswer = async (question, userId) => {
         ? contextDocs.map(doc => doc.content).join("\n\n")
         : "No specific university policy found.";
 
-    // UPDATED: Using gemini-2.5-flash (The current 2026 stable workhorse)
-    // Alternatively, use "gemini-3-flash-preview" for next-gen reasoning
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `You are the ASTU AI Assistant. 
@@ -92,7 +87,6 @@ export const askChatbot = async (req, res) => {
         res.status(200).json({ data: answer });
     } catch (err) {
         console.error("Chatbot Error:", err);
-        // Providing a more descriptive error for the 404 issue
         res.status(500).json({ 
             message: "AI Assistant unavailable. Check model versioning.",
             error: err.message 

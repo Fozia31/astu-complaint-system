@@ -1,23 +1,18 @@
 import Complaint from "../../models/complaint.model.js";
 import mongoose from 'mongoose';
 
-/**
- * CREATE a new complaint with file attachment support
- */
+
 export const createComplaint = async (req, res) => {
     try {
         const { title, description, category } = req.body;
 
-        // 1. Validate required fields
         if (!title || !description || !category) {
             return res.status(400).json({ message: 'Title, description and category are required' });
         }
 
-        // 2. Extract ONLY the filename from Multer
-        // Storing only '174082...jpg' instead of 'uploads/174082...jpg'
+
         const fileName = req.file ? req.file.filename : null;
 
-        // 3. Create the document in MongoDB
         const complaint = await Complaint.create({
             title,
             description,
@@ -36,9 +31,6 @@ export const createComplaint = async (req, res) => {
     }
 };
 
-/**
- * GET all complaints belonging to the logged-in student
- */
 export const getMyComplaints = async (req, res) => {
     try {
         const complaints = await Complaint
@@ -57,9 +49,7 @@ export const getMyComplaints = async (req, res) => {
     }
 };
 
-/**
- * GET a single complaint by ID with security checks
- */
+
 export const getComplaintById = async (req, res) => {
     const { id } = req.params;
     try {

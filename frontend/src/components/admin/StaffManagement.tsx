@@ -7,7 +7,6 @@ const StaffManagement = () => {
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Form State for new staff
   const [newStaff, setNewStaff] = useState({ name: '', email: '', department: '' });
   const [adding, setAdding] = useState(false);
 
@@ -37,7 +36,7 @@ const StaffManagement = () => {
     try {
       await api.post('/admin/add-staff', { ...newStaff, role: 'staff' });
       setNewStaff({ name: '', email: '', department: '' });
-      fetchData(); // Refresh list
+      fetchData(); 
       alert("Staff member added successfully!");
     } catch (err) {
       alert("Error adding staff");
@@ -49,7 +48,7 @@ const StaffManagement = () => {
   const handleAssign = async (complaintId: string, staffId: string) => {
     try {
       await api.patch(`/admin/complaints/${complaintId}/assign`, { staffId });
-      fetchData(); // Refresh to remove assigned complaint from list
+      fetchData(); 
     } catch (err) {
       alert("Assignment failed");
     }
@@ -61,7 +60,6 @@ const StaffManagement = () => {
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* SECTION 1: ADD NEW STAFF */}
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-fit">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-blue-100 text-blue-600 rounded-xl"><UserPlus size={20}/></div>

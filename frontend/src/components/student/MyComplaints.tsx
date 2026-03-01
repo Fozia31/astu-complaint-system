@@ -72,7 +72,6 @@ const MyComplaints = () => {
 
   return (
     <div className="animate-in fade-in duration-500">
-      {/* HIDDEN FILE INPUT */}
       <input 
         type="file" 
         ref={fileInputRef} 
@@ -81,7 +80,6 @@ const MyComplaints = () => {
         accept=".pdf"
       />
 
-      {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[#001a33]">My Complaints</h1>
@@ -89,7 +87,6 @@ const MyComplaints = () => {
         </div>
         
         <div className="flex gap-3">
-          {/* UPLOAD BUTTON (Triggers hidden input) */}
           <button 
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}

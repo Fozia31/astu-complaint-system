@@ -34,7 +34,6 @@ const StaffComplaintDetail = () => {
     setUpdatingStatus(true);
     try {
       await api.patch(`/staff/complaints/${id}/status`, { status: newStatus });
-      // We manually update local state for instant feedback before re-fetching
       setComplaint({ ...complaint, status: newStatus });
       await fetchComplaint(); 
     } catch (err) {
@@ -88,7 +87,6 @@ const StaffComplaintDetail = () => {
             <h1 className="text-3xl font-black text-slate-900 leading-tight">{complaint.title}</h1>
           </div>
 
-          {/* STATUS SELECTOR - This is where the status is updated */}
           <div className="relative inline-block text-left">
             <label className="block text-[10px] font-black text-slate-400 uppercase mb-1 ml-1">Change Status</label>
             <div className="flex items-center gap-2">
@@ -110,7 +108,6 @@ const StaffComplaintDetail = () => {
         </div>
 
         <div className="p-8 space-y-8">
-          {/* Student Info Card */}
           <div className="grid grid-cols-2 gap-4 p-6 bg-slate-50 rounded-2xl border border-slate-100">
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase">Student Name</p>
@@ -132,7 +129,6 @@ const StaffComplaintDetail = () => {
             </div>
           </div>
 
-          {/* Previous Remarks (Timeline) */}
           <div className="space-y-4">
             <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Update History</h4>
             <div className="space-y-3">
@@ -151,7 +147,6 @@ const StaffComplaintDetail = () => {
             </div>
           </div>
 
-          {/* Resolution Input */}
           {complaint.status !== 'resolved' ? (
             <div className="pt-6 border-t border-slate-100">
               <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Add Remark / Resolve Issue</h4>

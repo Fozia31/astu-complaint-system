@@ -48,7 +48,6 @@ const AssignedComplaints = () => {
 
   return (
     <div className="space-y-6 p-4 md:p-8 max-w-7xl mx-auto animate-in fade-in duration-500">
-      {/* 1. Header with Mini Stats */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Assigned Tasks</h1>
@@ -67,7 +66,6 @@ const AssignedComplaints = () => {
         </div>
       </header>
 
-      {/* 2. Advanced Search & Filter Bar */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <div className="md:col-span-8 relative group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />

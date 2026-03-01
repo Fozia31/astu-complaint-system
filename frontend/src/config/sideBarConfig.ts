@@ -5,7 +5,6 @@ import {
   User, 
   Users, 
   ShieldCheck,
-  Settings
 } from 'lucide-react';
 
 export const sidebarConfig = {

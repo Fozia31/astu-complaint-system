@@ -19,13 +19,11 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
         
-        // Compare provided password with hashed password in DB
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        // Remove password from response for security
         const userData = user.toObject();
         delete userData.password;
 
@@ -50,11 +48,10 @@ export const signUp = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
         
-        // Create new user (Student by default)
         const newUser = new User({
             name,
             email,
-            password, // Will be hashed by pre-save hook in user.model.js
+            password,
             role: role || 'student',
             department
         });

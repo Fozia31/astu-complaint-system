@@ -20,11 +20,9 @@ const DashboardLayout = () => {
           const parsedUser = JSON.parse(rawData);
           
           if (parsedUser && parsedUser.role) {
-            // ROLE PROTECTION: Ensure current path matches the user's role
-            const currentPathRole = location.pathname.split('/')[1]; // e.g., 'admin' from /admin/dashboard
+            const currentPathRole = location.pathname.split('/')[1]; 
             
             if (currentPathRole !== parsedUser.role) {
-                // If mismatch, force redirect to their correct dashboard
                 navigate(`/${parsedUser.role}/dashboard`, { replace: true });
             }
             
@@ -39,7 +37,6 @@ const DashboardLayout = () => {
         }
       }
       
-      // Delay allows disk write to finish
       setTimeout(() => {
         setIsInitializing(false);
       }, 100);
@@ -88,7 +85,7 @@ const DashboardLayout = () => {
         <div className="p-6 flex items-center justify-between border-b border-white/10">
           <div className="flex items-center gap-3">
             <GraduationCap className="text-[#f1b400]" size={32} />
-            <h1 className="font-bold text-sm tracking-tight">ASTU PORTAL</h1>
+            <h1 className="font-bold text-sm tracking-tight">ASTU Complain Tracker</h1>
           </div>
           <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-white/70 hover:text-white">
             <X size={20} />

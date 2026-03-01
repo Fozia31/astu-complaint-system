@@ -10,7 +10,6 @@ const SubmitComplaint = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   
-  // Existing Form State
   const [formData, setFormData] = useState({
     title: '',
     category: 'Academic',
@@ -20,7 +19,6 @@ const SubmitComplaint = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   
-  // AI Assistant States
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -28,7 +26,6 @@ const SubmitComplaint = () => {
     { role: 'ai', content: "Hello! I'm here to help you draft your complaint. Ask me about university policies or request help phrasing your issue." }
   ]);
 
-  // Scroll chat to bottom on new message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
@@ -133,7 +130,6 @@ const SubmitComplaint = () => {
               <textarea name="description" value={formData.description} onChange={handleChange} required className="w-full min-h-[150px] bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none" placeholder="Provide a detailed account..."></textarea>
             </div>
 
-            {/* File Upload Section Kept Intact */}
             <div className="space-y-2">
               <label className="text-xs font-bold text-[#001a33] uppercase tracking-wider">Attachments</label>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,.pdf,.doc,.docx" />
@@ -163,7 +159,6 @@ const SubmitComplaint = () => {
         </div>
       </div>
 
-      {/* --- AI ASSISTANT PANEL --- */}
       {!isChatOpen && (
         <button onClick={() => setIsChatOpen(true)} className="fixed bottom-8 right-8 w-16 h-16 bg-[#001a33] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all z-50">
           <MessageCircle size={28} />
