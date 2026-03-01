@@ -2,7 +2,7 @@
 import express from 'express';
 import { authorizeRoles } from '../../middleware/role.middleware.js';
 import { authMiddleware } from '../../middleware/auth.middleware.js';
-import { getAllComplaints, assignComplaintToStaff, deleteComplaint ,getComplaintById} from '../../controllers/complaints/admin.controller.js';
+import { getAllComplaints, assignComplaintToStaff, deleteComplaint ,getComplaintById,getStaffList} from '../../controllers/complaints/admin.controller.js';
 
 const router = express.Router();
 
@@ -13,5 +13,7 @@ router.patch('/admin/complaints/:id/assign',authMiddleware, authorizeRoles("admi
 router.get('/admin/complaints/:id', authMiddleware, authorizeRoles("admin"), getComplaintById);
 
 router.delete('/admin/complaints/:id', authMiddleware, authorizeRoles("admin"), deleteComplaint);
+
+router.get('/admin/staff-list', authMiddleware, authorizeRoles("admin"), getStaffList);
     
 export default router;

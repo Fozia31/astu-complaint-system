@@ -20,12 +20,12 @@ export const sidebarConfig = {
     { name: 'Assigned Complaints', icon: ListChecks, path: '/staff/assigned' },
   ],
   admin: [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
-    { name: 'All Complaints', icon: ListChecks, path: '/admin/complaints' },
-    { name: 'Manage Users', icon: Users, path: '/admin/students' }, 
-    { name: 'Categories', icon: ShieldCheck, path: '/admin/categories' },
-    { name: 'System Settings', icon: Settings, path: '/admin/settings' },
-  ]
+  { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
+  { name: 'All Complaints', icon: ListChecks, path: '/admin/complaints' }, 
+  { name: 'Manage Users', icon: Users, path: '/admin/students' }, 
+  { name: 'Staff Management', icon: Users, path: '/admin/staff-management' }, 
+  { name: 'Categories', icon: ShieldCheck, path: '/admin/categories' },
+]
 };
 
 export type Role = keyof typeof sidebarConfig;

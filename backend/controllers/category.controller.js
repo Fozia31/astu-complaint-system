@@ -1,42 +1,38 @@
 import Category from '../models/category.model.js';
 
 export const getAllCategories = async (req, res) => {
-    try{
+    try {
         const categories = await Category.find();
-
-        if(categories.length === 0){
-            return res.status(404).json({message:"No categories found"});
-        }
-        return res.status(200).json({message:"Categories retrieved successfully",data:categories});
-
-
-    }catch(error){
-        res.status(500).json({message:"Server Error",error:error.message});
+        return res.status(200).json({ data: categories });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error" });
     }
 }
 
 export const createCategory = async (req, res) => {
-    try{
-        const {name, description} = req.body;
-        if(!name){
-            return res.status(400).json({message:"Name is required"});
+    try {
+        const { name, description } = req.body;
+        if (!name) return res.status(400).json({ message: "Name is required" });
+
+        const existingCategory = await Category.findOne({ 
+            name: { $regex: new RegExp(`^${name.trim()}$`, 'i') } 
+        });
+        
+        if (existingCategory) {
+            return res.status(400).json({ message: "Category already exists" });
         }
-        const existingCategory = await Category.findOne({name});
-        if(existingCategory){
-            return res.status(400).json({message:"Category already exists"});
-        }
+
         const category = await Category.create({
-            name,
+            name: name.trim(),
             description
-        })
-        await category.save();
-        return res.status(201).json({
-            message:"Category created successfully",
-            data:category
         });
 
-    }catch(error){
-        res.status(500).json({message:"Server Error",error:error.message});
+        return res.status(201).json({
+            message: "Category created successfully",
+            data: category
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
 }
 

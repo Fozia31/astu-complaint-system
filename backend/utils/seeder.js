@@ -8,7 +8,7 @@ export const seedAdmin = async () => {
             const admin = new User({
                 name: 'System Admin',
                 email: 'admin@astu.edu.et',
-                password: 'admin123', // Will be hashed by the pre-save hook
+                password: 'admin123',
                 role: 'admin',
                 department: 'ICT'
             });

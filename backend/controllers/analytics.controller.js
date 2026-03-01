@@ -1,113 +1,111 @@
-// controllers/analytics.controller.js
 import Complaint from "../models/complaint.model.js";
+import User from "../models/user.model.js";
 
-export const getTotalComplaints = async (req, res) => {
+/**
+ * Main Optimized Dashboard Summary
+ * Fetches all stats in parallel for the frontend dashboard
+ */
+export const getDashboardStats = async (req, res) => {
     try {
-        const totalComplaints = await Complaint.countDocuments(); // This is a number
+        const [
+            totalCount, 
+            resolvedCount, 
+            avgTimeResult, 
+            categoryStats, 
+            monthlyStats, 
+            userCount
+        ] = await Promise.all([
+            Complaint.countDocuments(),
+            Complaint.countDocuments({ status: "resolved" }),
+            Complaint.aggregate([
+                { $match: { status: "resolved", resolvedAt: { $exists: true } } },
+                {
+                    $group: {
+                        _id: null,
+                        avgTime: { $avg: { $divide: [{ $subtract: ["$resolvedAt", "$createdAt"] }, 86400000] } }
+                    }
+                }
+            ]),
+            Complaint.aggregate([
+                { $group: { _id: "$category", total: { $sum: 1 } } },
+                { $lookup: { from: "categories", localField: "_id", foreignField: "_id", as: "cat" } },
+                { $unwind: "$cat" },
+                { $project: { _id: 0, category: "$cat.name", total: 1 } }
+            ]),
+            Complaint.aggregate([
+                {
+                    $group: {
+                        _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
+                        total: { $sum: 1 }
+                    }
+                },
+                { $sort: { "_id": 1 } },
+                { $limit: 6 }
+            ]),
+            User.countDocuments()
+        ]);
+
         res.status(200).json({
-            message: "Total complaints retrieved successfully",
-            totalComplaints: totalComplaints // Remove .length
+            stats: {
+                totalComplaints: totalCount,
+                resolutionRate: totalCount > 0 ? (resolvedCount / totalCount) * 100 : 0,
+                averageResolutionTime: avgTimeResult[0]?.avgTime || 0,
+                totalUsers: userCount
+            },
+            categoryData: categoryStats,
+            monthlyData: monthlyStats
         });
     } catch (error) {
-        res.status(500).json({ message: "Server Error", error: error.message });
+        res.status(500).json({ message: "Analytics Error", error: error.message });
     }
-}
+};
 
-// analytics.controller.js
+/**
+ * Individual Analytics Helpers
+ */
+export const getTotalComplaints = async (req, res) => {
+    try {
+        const count = await Complaint.countDocuments();
+        res.status(200).json({ totalComplaints: count });
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
 
 export const getResolutionRate = async (req, res) => {
     try {
         const total = await Complaint.countDocuments();
         const resolved = await Complaint.countDocuments({ status: "resolved" });
-        // Ensure we send a field named 'resolutionRate'
-        const rate = total > 0 ? (resolved / total * 100) : 0;
-
-        res.status(200).json({
-            message: "Success",
-            resolutionRate: rate // This must match the frontend key
-        });
-    } catch (error) {
-        res.status(500).json({ message: "Error", error: error.message });
-    }
-}
+        res.status(200).json({ resolutionRate: total > 0 ? (resolved / total) * 100 : 0 });
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
 
 export const getAverageResolutionTime = async (req, res) => {
     try {
         const avg = await Complaint.aggregate([
-            { $match: { status: "resolved" } },
-            {
-                $group: {
-                    _id: null,
-                    avgTime: { $avg: { $divide: [{ $subtract: ["$resolvedAt", "$createdAt"] }, 86400000] } }
-                }
-            }
+            { $match: { status: "resolved", resolvedAt: { $exists: true } } },
+            { $group: { _id: null, avgTime: { $avg: { $divide: [{ $subtract: ["$resolvedAt", "$createdAt"] }, 86400000] } } } }
         ]);
+        res.status(200).json({ averageResolutionTime: avg[0]?.avgTime || 0 });
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
 
-        res.status(200).json({
-            message: "Success",
-            averageResolutionTime: avg[0]?.avgTime || 0 // Ensure this key exists
-        });
-    } catch (error) {
-        res.status(500).json({ message: "Error", error: error.message });
-    }
-}
-
-    export const getComplaintsByCategory = async (req, res) => {
-        try{
-            const complaintsByCategory = await Complaint.aggregate([
-                {
-                    $group: {
-                        _id: "$category",
-                        total: { $sum: 1 }
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "categories",
-                        localField: "_id",
-                        foreignField: "_id",
-                        as: "categoryDetails"
-                    }
-                },
-                { $unwind: "$categoryDetails" },
-                    {
-                        $project: {
-                            _id: 0,
-                            category: "$categoryDetails.name",
-                            total: 1
-                        }
-                }
-            ]);
-
-            return res.status(200).json({
-                message:"Complaints by category retrieved successfully",
-                data: complaintsByCategory
-            })
-            
-        }catch(error){
-            res.status(500).json({message:"Server Error",error:error.message});
-        }
-    }
+export const getComplaintsByCategory = async (req, res) => {
+    try {
+        const complaintsByCategory = await Complaint.aggregate([
+            { $group: { _id: "$category", total: { $sum: 1 } } },
+            { $lookup: { from: "categories", localField: "_id", foreignField: "_id", as: "cat" } },
+            { $unwind: "$cat" },
+            { $project: { _id: 0, category: "$cat.name", total: 1 } }
+        ]);
+        res.status(200).json({ data: complaintsByCategory });
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
 
 export const getMonthlyComplaints = async (req, res) => {
-    try{
-        const monthlyComplaints = await Complaint.aggregate([
-            {
-                $group: {
-                    _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
-                    total: { $sum: 1 }
-                }
-            },
-             { $sort: { "_id.year": 1, "_id.month": 1 } }
+    try {
+        const data = await Complaint.aggregate([
+            { $group: { _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } }, total: { $sum: 1 } } },
+            { $sort: { "_id": 1 } }
         ]);
-
-        return res.status(200).json({
-            message:"Monthly complaints retrieved successfully",
-            data: monthlyComplaints
-        });
-
-    }catch(error){
-        res.status(500).json({message:"Server Error",error:error.message});
-    }
-}
-
+        res.status(200).json({ data });
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};

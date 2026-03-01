@@ -19,10 +19,8 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const token = localStorage.getItem('token');
-        // Check if we are using a mock token
         const isMock = token && token.startsWith('mock-');
 
-        // Only clear storage and redirect if it's a REAL expired token (not a mock one)
         if (error.response?.status === 401 && !isMock && window.location.pathname !== '/login') {
             console.error("Session expired. Redirecting...");
             localStorage.clear(); 

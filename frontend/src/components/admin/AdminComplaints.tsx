@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Added for navigation
-import { Search, Calendar, Loader2, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Calendar, Loader2, AlertCircle, UserPlus } from 'lucide-react';
 import api from '@/lib/api';
+// IMPORT the Modal component
+import AssignStaffModal from './AssignStaffModal';
 
 const AdminComplaints = () => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All Statuses'); // Added status filter state
+  const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [error, setError] = useState<string | null>(null);
+
+  // MODAL STATE
+  const [selectedComplaint, setSelectedComplaint] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchComplaints();
@@ -19,7 +25,7 @@ const AdminComplaints = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.get('/admin/complaints'); 
+      const response = await api.get('/admin/complaints');
       setComplaints(response.data.complaints || []);
     } catch (error: any) {
       console.error("Error fetching admin complaints:", error);
@@ -39,15 +45,27 @@ const AdminComplaints = () => {
     }
   };
 
-  // FIXED SEARCH & FILTER LOGIC
+  // OPEN MODAL HANDLER
+  const handleOpenAssign = (complaint: any) => {
+    setSelectedComplaint(complaint);
+    setIsModalOpen(true);
+  };
+
+  // SUCCESS HANDLER (Updates UI locally without full reload)
+  const onUpdateSuccess = (updatedComplaint: any) => {
+    setComplaints((prev: any) =>
+      prev.map((c: any) => (c._id === updatedComplaint._id ? updatedComplaint : c))
+    );
+  };
+
   const filtered = complaints.filter((c: any) => {
-    const matchesSearch = 
-      c.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch =
+      c.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.student?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.student?.email?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus = 
-      statusFilter === 'All Statuses' || 
+    const matchesStatus =
+      statusFilter === 'All Statuses' ||
       c.status?.toLowerCase() === statusFilter.toLowerCase();
 
     return matchesSearch && matchesStatus;
@@ -63,12 +81,11 @@ const AdminComplaints = () => {
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <h1 className="text-2xl font-bold text-[#001a33]">Student Grievances</h1>
-        {error && <span className="text-red-500 text-sm flex items-center gap-1"><AlertCircle size={14}/> {error}</span>}
+        {error && <span className="text-red-500 text-sm flex items-center gap-1"><AlertCircle size={14} /> {error}</span>}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        {/* Added value and onChange for Status Filter */}
-        <select 
+        <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm outline-none font-medium"
@@ -78,14 +95,14 @@ const AdminComplaints = () => {
           <option value="resolved">Resolved</option>
           <option value="in-progress">In Progress</option>
         </select>
-        
+
         <div className="relative md:col-span-2">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-          <input 
-            placeholder="Search by student name, email or title..." 
+          <input
+            placeholder="Search by student name, email or title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 h-11 bg-white border border-slate-200 rounded-xl text-sm outline-none" 
+            className="w-full pl-10 h-11 bg-white border border-slate-200 rounded-xl text-sm outline-none"
           />
         </div>
         <button className="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl border border-orange-100 font-bold text-sm flex items-center justify-center gap-2 hover:bg-orange-100 transition-all">
@@ -114,12 +131,24 @@ const AdminComplaints = () => {
                     <p className="text-[10px] text-slate-400 font-medium">{item.student?.email}</p>
                   </td>
                   <td className="px-6 py-5 text-sm text-slate-600 font-medium">{item.title}</td>
-                  <td className="px-6 py-5 text-xs text-slate-500 italic">
-                    {item.assignedTo?.name || "Unassigned"}
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs ${item.assignedTo?.name ? 'text-slate-700 font-semibold' : 'text-slate-300 italic'}`}>
+                        {item.assignedTo?.name || "Unassigned"}
+                      </span>
+                      {/* ASSIGN ICON BUTTON */}
+                      <button 
+                        onClick={() => handleOpenAssign(item)}
+                        className="p-1.5 hover:bg-violet-50 text-violet-500 rounded-lg transition-colors"
+                        title="Assign Staff"
+                      >
+                        <UserPlus size={14} />
+                      </button>
+                    </div>
                   </td>
                   <td className="px-6 py-5">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
-                      item.status === 'pending' ? 'bg-orange-100 text-orange-600' : 
+                      item.status === 'pending' ? 'bg-orange-100 text-orange-600' :
                       item.status === 'resolved' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-100 text-blue-600'
                     }`}>
                       {item.status}
@@ -129,16 +158,15 @@ const AdminComplaints = () => {
                     {new Date(item.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-5 flex justify-center gap-3">
-                    {/* UPDATED VIEW BUTTON */}
-                    <button 
+                    <button
                       onClick={() => navigate(`/admin/complaints/${item._id}`)}
                       className="text-orange-600 text-[10px] font-black uppercase hover:underline"
                     >
                       View
                     </button>
-                    <button 
-                       onClick={() => handleDelete(item._id)}
-                       className="text-red-500 text-[10px] font-black uppercase hover:underline"
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      className="text-red-500 text-[10px] font-black uppercase hover:underline"
                     >
                       Delete
                     </button>
@@ -146,15 +174,28 @@ const AdminComplaints = () => {
                 </tr>
               )) : (
                 <tr>
-                   <td colSpan={6} className="px-6 py-10 text-center text-slate-400 text-sm italic">
-                     No complaints found matching your criteria.
-                   </td>
+                  <td colSpan={6} className="px-6 py-10 text-center text-slate-400 text-sm italic">
+                    No complaints found matching your criteria.
+                  </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* RENDER MODAL CONDITIONALLY */}
+      {selectedComplaint && (
+        <AssignStaffModal
+          isOpen={isModalOpen}
+          complaint={selectedComplaint}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedComplaint(null);
+          }}
+          onUpdateSuccess={onUpdateSuccess}
+        />
+      )}
     </div>
   );
 };

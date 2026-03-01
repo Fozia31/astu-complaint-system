@@ -12,7 +12,6 @@ import MyComplaints from './components/student/MyComplaints'
 import StudentDashboard from './components/student/StudentDashboard'
 import ComplaintDetail from './components/student/ComplaintDetail'
 
-// Admin Components
 import ManageUsers from './components/admin/StudentsList'
 import CategoryManager from './components/admin/CategoryManager'
 import AdminComplaints from './components/admin/AdminComplaints'
@@ -21,16 +20,15 @@ import ComplaintDetails from './components/admin/ComplaintDetails'
 import StaffComplaintDetail from './components/staff/StaffComplaintDetail'
 import StaffDashboard from './components/staff/StaffDashboard'
 import AssignedComplaints from './components/staff/AssignedComplaints'
+import StaffManagement from './components/admin/StaffManagement'
 
 const App = () => {
   return (
     <Routes>
-  {/* Public Routes */}
   <Route path="/" element={<Home />} />
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
 
-  {/* Student Protected Routes */}
   <Route path="/student" element={<DashboardLayout />}>
     <Route index element={<Navigate to="dashboard" replace />} />
     <Route path="dashboard" element={<StudentDashboard />} />
@@ -40,21 +38,18 @@ const App = () => {
     <Route path="profile" element={<ProfilePage />} />
   </Route> 
 
-  {/* Admin Protected Routes */}
   <Route path="/admin" element={<DashboardLayout />}>
     <Route index element={<Navigate to="dashboard" replace />} /> 
     <Route path="dashboard" element={<AdminDashboard />} />
     <Route path="complaints" element={<AdminComplaints />} />
-    {/* FIXED: Removed /admin/ from path below */}
     <Route path="complaints/:id" element={<ComplaintDetails />} />
     <Route path="students" element={<ManageUsers />} />
     <Route path="categories" element={<CategoryManager />} />
-    <Route path="settings" element={<div>System Settings Component</div>} />
+    <Route path="staff-management" element={<StaffManagement />} />
   </Route>
 
   {/* Staff Protected Routes */}
   <Route path="/staff" element={<DashboardLayout />}>
-    {/* ADDED: Index redirect for staff */}
     <Route index element={<Navigate to="dashboard" replace />} />
     <Route path="dashboard" element={<StaffDashboard />} />
     <Route path="assigned" element={<AssignedComplaints />} />

@@ -19,7 +19,6 @@ router.get('/staff/complaints/:id', authMiddleware, authorizeRoles("staff"), get
 
 router.patch('/staff/complaints/:id/status', authMiddleware, authorizeRoles("staff"), updateComplaintStatus);
 
-// 4. Add remarks/comments
 router.post('/staff/complaints/:id/remarks', authMiddleware, authorizeRoles("staff"), addComplaintRemarks);
 
 export default router;

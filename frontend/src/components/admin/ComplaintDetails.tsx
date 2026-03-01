@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, User, MessageSquare, Clock, 
   CheckCircle, Trash2, ShieldCheck, Tag, 
-  AlertCircle, Loader2 
+  AlertCircle, Loader2, FileText, ExternalLink, Paperclip 
 } from 'lucide-react';
 import api from '@/lib/api';
 
@@ -22,7 +22,8 @@ const ComplaintDetails = () => {
     try {
       setLoading(true);
       const response = await api.get(`/admin/complaints/${id}`);
-      setComplaint(response.data.complaint);
+      // Adjust this based on your API response structure (e.g., response.data.data)
+      setComplaint(response.data.complaint || response.data.data);
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to load complaint details.");
     } finally {
@@ -32,9 +33,8 @@ const ComplaintDetails = () => {
 
   const handleStatusUpdate = async (newStatus: string) => {
     try {
-      // Logic for updating status (assuming you have a patch route)
       await api.patch(`/admin/complaints/${id}/status`, { status: newStatus });
-      fetchComplaintDetail(); // Refresh data
+      fetchComplaintDetail(); // Refresh data after update
     } catch (err) {
       alert("Failed to update status");
     }
@@ -56,6 +56,7 @@ const ComplaintDetails = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      
       {/* Navigation Header */}
       <div className="flex items-center justify-between mb-8">
         <button 
@@ -66,12 +67,13 @@ const ComplaintDetails = () => {
         </button>
         <div className="flex gap-3">
           <span className="text-xs font-black text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-lg">
-            ID: {complaint._id.slice(-6)}
+            ID: {complaint._id?.slice(-6)}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
         {/* Left Column: Content */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-8">
@@ -97,21 +99,47 @@ const ComplaintDetails = () => {
               <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <MessageSquare size={16} /> Detailed Description
               </h3>
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 text-slate-600 leading-relaxed text-lg">
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 text-slate-600 leading-relaxed text-lg whitespace-pre-wrap">
                 {complaint.description}
               </div>
             </div>
           </div>
 
-          {/* Attachments Section (If any) */}
-          {complaint.attachments?.length > 0 && (
+          {/* ATTACHMENTS SECTION */}
+          {complaint.attachments && complaint.attachments.length > 0 && (
             <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-8">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Attachments</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {/* Map your attachments here */}
-                <div className="p-4 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
-                   Document.pdf
-                </div>
+              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                <Paperclip size={18} /> Attachments ({complaint.attachments.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {complaint.attachments.map((file: string, index: number) => {
+                  // Clean the filename (extracting from path if stored as 'uploads/file.jpg')
+                  const fileNameOnly = file.split(/[/\\]/).pop();
+                  const fileUrl = `http://localhost:5000/uploads/${fileNameOnly}`;
+
+                  return (
+                    <a 
+                      key={index}
+                      href={fileUrl} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:border-blue-200 hover:bg-blue-50/50 transition-all group"
+                    >
+                      <div className="flex items-center gap-3 overflow-hidden">
+                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-500 shadow-sm group-hover:scale-110 transition-transform">
+                          <FileText size={20} />
+                        </div>
+                        <div className="overflow-hidden">
+                          <p className="text-sm font-bold text-slate-700 truncate max-w-[150px]">
+                            {fileNameOnly}
+                          </p>
+                          <p className="text-[10px] text-slate-400 uppercase font-black">View Document</p>
+                        </div>
+                      </div>
+                      <ExternalLink size={16} className="text-slate-300 group-hover:text-blue-500 transition-colors" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -127,13 +155,13 @@ const ComplaintDetails = () => {
                 <User size={24} />
               </div>
               <div>
-                <p className="text-sm font-bold text-slate-800">{complaint.student?.name}</p>
+                <p className="text-sm font-bold text-slate-800">{complaint.student?.name || 'Unknown Student'}</p>
                 <p className="text-[10px] text-slate-500">{complaint.student?.email}</p>
               </div>
             </div>
             <div className="pt-4 border-t border-slate-50">
               <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Department</p>
-              <p className="text-xs font-bold text-slate-700">{complaint.student?.department || 'N/A'}</p>
+              <p className="text-xs font-bold text-slate-700">{complaint.student?.department || 'Not Specified'}</p>
             </div>
           </div>
 
@@ -143,7 +171,7 @@ const ComplaintDetails = () => {
                 <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Category</h3>
                 <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
                   <Tag size={16} className="text-blue-500" />
-                  {complaint.category?.name || 'General Inquiry'}
+                  {typeof complaint.category === 'object' ? complaint.category.name : complaint.category || 'General'}
                 </div>
              </div>
              
@@ -160,9 +188,14 @@ const ComplaintDetails = () => {
           <div className="grid grid-cols-1 gap-3">
             <button 
               onClick={() => handleStatusUpdate('resolved')}
-              className="w-full bg-[#2d4bbd] hover:bg-[#213996] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-100"
+              disabled={complaint.status === 'resolved'}
+              className={`w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
+                complaint.status === 'resolved' 
+                ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
+                : 'bg-[#2d4bbd] hover:bg-[#213996] text-white shadow-blue-100'
+              }`}
             >
-              <CheckCircle size={18} /> Mark as Resolved
+              <CheckCircle size={18} /> {complaint.status === 'resolved' ? 'Resolved' : 'Mark as Resolved'}
             </button>
             <button className="w-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all">
               <ShieldCheck size={18} /> Assign to Staff
