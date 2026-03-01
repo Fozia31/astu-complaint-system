@@ -10,10 +10,10 @@ const complaintSchema = new mongoose.Schema({
         required:true
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
+    type: String, 
+    required: true,
+    enum: ['Academic', 'Facilities', 'Hostel/Dormitory', 'Financial'] 
+  },
     status:{
         type:String,
         enum:["open","in-progress","resolved"],

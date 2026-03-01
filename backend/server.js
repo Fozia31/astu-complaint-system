@@ -7,6 +7,7 @@ import categoryRoutes from './routes/categories.route.js';
 import userRoutes from './routes/user.route.js';
 import analyticsRoutes from './routes/analytics.route.js';
 import staffComplaintRoutes from './routes/complaint/staff.route.js';
+import chatbotRoutes from './routes/chatbot.route.js';
 import { connectDB } from './config/db.js';
 import cors from 'cors';
 import { seedAdmin } from './utils/seeder.js';
@@ -28,6 +29,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/uploads', express.static('uploads'));
+
 app.use('/api/auth', authRoutes);
 app.use('/api', studentComplaintRoutes);
 app.use('/api', categoryRoutes);
@@ -35,6 +38,7 @@ app.use('/api', userRoutes);
 app.use('/api',analyticsRoutes);
 app.use('/api',adminComplaintRoutes);
 app.use('/api',staffComplaintRoutes)
+app.use('/api',chatbotRoutes);
 
 
 const startServer = () =>{
