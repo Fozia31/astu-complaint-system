@@ -1,8 +1,8 @@
 # 🎓 ASTU Complaint Management System
 
-A full-stack web-based Complaint Management System developed for **Adama Science and Technology University (ASTU)**.
+A full-stack, role-based Complaint Management System developed for Adama Science and Technology University (ASTU).
 
-This platform enables students to submit complaints, staff members to manage assigned cases, and administrators to monitor and control the entire system efficiently.
+This platform streamlines the complaint submission and resolution process by enabling structured communication between students, staff members, and administrators — now enhanced with an AI-powered assistant using Retrieval-Augmented Generation (RAG).
 
 ---
 
@@ -10,23 +10,25 @@ This platform enables students to submit complaints, staff members to manage ass
 
 The ASTU Complaint Management System is designed to:
 
-- Provide a structured and transparent complaint process
-- Improve communication between students and staff
+- Provide a structured and transparent complaint handling process
+- Improve communication between students and university staff
 - Track complaint status in real-time
-- Enable role-based system management
+- Enable role-based access control
 - Deliver a clean institutional user interface
+- Assist users with AI-powered complaint writing and guidance
 
 ---
 
-## 👥 System Roles
+## 👥 User Roles & Permissions
 
 ### 👨‍🎓 Student
-- Register & Login
+- Register & Login securely
 - Submit new complaints
 - View personal complaint history
-- Track complaint status
+- Track complaint status in real-time
 - Chat with assigned staff
-- Manage profile
+- Use AI assistant to improve complaint clarity
+- Manage personal profile
 
 ### 👨‍🏫 Staff
 - View assigned complaints
@@ -36,115 +38,146 @@ The ASTU Complaint Management System is designed to:
 - Manage profile
 
 ### 👨‍💼 Admin
-- View all system complaints
-- Manage users (Student / Staff / Admin)
+- View and manage all complaints
+- Manage users (Students / Staff / Admins)
 - Manage complaint categories
 - Access analytics dashboard
-- Monitor system activity
+- Monitor system-wide activity
+
+---
+
+## 🤖 AI Assistant (RAG-Based)
+
+The system includes an AI Assistant powered by Retrieval-Augmented Generation (RAG).
+
+### 🔎 What It Does
+- Helps students write clearer and more structured complaints
+- Retrieves relevant university policies or similar past cases
+- Provides intelligent suggestions before submission
+- Improves complaint quality and processing efficiency
+
+### ⚙️ How It Works
+1. Retrieves relevant contextual data (policies, FAQs, previous complaints)
+2. Sends context + user input to the LLM
+3. Generates accurate, context-aware responses
+
+### 🧠 Benefits
+- Reduces incomplete or unclear complaints
+- Speeds up complaint resolution
+- Improves overall communication quality
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
+### 🎨 Frontend
 - React.js (Vite)
 - Tailwind CSS
 - React Router
 - Axios
 
-### Backend
+### 🖥️ Backend
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
 - JWT Authentication
-- bcrypt (password hashing)
+- bcrypt (Password Hashing)
 
----
+### 🤖 AI Integration
+- Retrieval-Augmented Generation (RAG)
+- Vector-based document retrieval
+- LLM-powered response generation
 
 ---
 
 ## 🔐 API Endpoints
 
 ### Complaint Routes
-
-
-POST /api/complaints
-GET /api/complaints/my
-GET /api/complaints/:id
-PUT /api/complaints/:id/status
-POST /api/complaints/:id/message
+POST   /api/complaints  
+GET    /api/complaints/my  
+GET    /api/complaints/:id  
+PUT    /api/complaints/:id/status  
+POST   /api/complaints/:id/message  
 
 ### Authentication Routes
-POST /api/auth/register
-POST /api/auth/login
-
+POST   /api/auth/register  
+POST   /api/auth/login  
 
 ---
 
 ## ⚙️ Installation Guide
 
 ### 1️⃣ Clone Repository
+git clone https://github.com/Fozia31/astu-complaint-system.git
+cd astu-complaint-system  
 
-```bash
-git clone https://github.com/your-username/astu-complaint-system.git
-cd astu-complaint-system
+---
 
 ### 2️⃣ Backend Setup
+cd backend  
+npm install  
 
-cd backend
-npm install
+Create a .env file:
 
-create a .env file with the following content:
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-port=5000
-npm run dev
-backend server should now be running on http://localhost:5000
+MONGO_URI=your_mongodb_connection_string  
+JWT_SECRET=your_jwt_secret_key  
+PORT=5000  
+
+Run backend:
+npm run dev  
+
+Backend runs at:
+http://localhost:5000  
+
+---
 
 ### 3️⃣ Frontend Setup
-cd frontend
-npm install
-npm run dev
-frontend should now be running on http://localhost:5173
+cd frontend  
+npm install  
+npm run dev  
 
-Design System
+Frontend runs at:
+http://localhost:5173  
 
-Institutional Deep Blue & Gold theme
-Shared Navbar & Sidebar layout
-Role-based dashboard interface
-Consistent spacing and typography
-Clean academic UI design
+---
 
-🔒 Security Features
+## 🎨 Design System
 
-Password hashing with bcrypt
+- Institutional Deep Blue & Gold theme
+- Shared Navbar & Sidebar layout
+- Role-based dashboard interfaces
+- Clean academic UI design
+- Consistent spacing and typography
 
-JWT-based authentication
+---
 
-Role-based authorization middleware
+## 🔒 Security Features
 
-Protected API routes
+- Password hashing with bcrypt
+- JWT-based authentication
+- Role-based authorization middleware
+- Protected API routes
+- Secure environment configuration
 
-📊 Core Features
+---
 
-Role-based access control
-Complaint status tracking
-Staff-student conversation system
-Admin analytics dashboard
-Category management
-User management
+## 📊 Core Features
 
-🚀 Future Improvements
-Email notification system
-File upload support
-Real-time chat (WebSocket)
-AI-assisted complaint writing
-Advanced reporting system
+- Role-based access control
+- Complaint lifecycle tracking
+- Staff–student conversation system
+- Admin analytics dashboard
+- Category management
+- User management
+- AI-powered complaint assistant (RAG)
+- Email notification system
+- File upload support
 
-👩‍💻 Developer
+---
 
-Fozia Damtew
-Computer Science Student
+## 👩‍💻 Developer
+
+Fozia Damtew  
+Computer Science Student  
 Adama Science and Technology University
-
