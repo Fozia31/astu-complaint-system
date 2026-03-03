@@ -162,7 +162,6 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-// Stat Card Component
 interface StatCardProps {
   title: string;
   val: string | number;

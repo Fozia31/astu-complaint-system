@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Home from '@/pages/(public)/home/page'
-import About from '@/pages/(public)/About/page'
+import About from '@/pages/(public)/about/page'
 import Login from '@/pages/(public)/login/page'
 import Register from '@/pages/(public)/register/page'
 import DashboardLayout from './components/DashboardLayout'
@@ -26,6 +26,7 @@ const App = () => {
   return (
     <Routes>
   <Route path="/" element={<Home />} />
+  <Route path="/about" element={<About />} />
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
 

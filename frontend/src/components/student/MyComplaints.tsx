@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/lib/api';
 
 const MyComplaints = () => {
-  const [complaints, setComplaints] = useState([]);
+  const [complaints, setComplaints] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [uploading, setUploading] = useState(false); // State for AI upload
+  const [uploading, setUploading] = useState(false); 
   const navigate = useNavigate();
   
   // Ref for the hidden file input

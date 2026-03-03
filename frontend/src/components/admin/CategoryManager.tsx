@@ -3,7 +3,7 @@ import { Plus, Trash2, Tag, Loader2, X, AlignLeft, Edit2, Check } from 'lucide-r
 import api from '@/lib/api';
 
 const CategoryManager = () => {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [newCat, setNewCat] = useState({ name: '', description: '' });
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
