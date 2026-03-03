@@ -12,6 +12,9 @@ import { connectDB } from './config/db.js';
 import cors from 'cors';
 import { seedAdmin } from './utils/seeder.js';
 
+import http from 'http';
+
+
 const corsOptions = {
     origin: ['http://localhost:5173'], 
     methods: ['GET','POST','PUT','DELETE','PATCH'],
@@ -39,6 +42,22 @@ app.use('/api',analyticsRoutes);
 app.use('/api',adminComplaintRoutes);
 app.use('/api',staffComplaintRoutes)
 app.use('/api',chatbotRoutes);
+
+
+// Add this temporarily at the top of your server.js
+// const http = require('http');
+
+// Make a request to an external service to see your IP
+http.get('http://api.ipify.org', (resp) => {
+  let data = '';
+  resp.on('data', (chunk) => { data += chunk; });
+  resp.on('end', () => {
+    console.log('✅ Your Render outbound IP is:', data);
+  });
+}).on('error', (err) => {
+  console.log('Error getting IP:', err.message);
+});
+
 
 
 const startServer = () =>{
