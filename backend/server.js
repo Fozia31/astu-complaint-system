@@ -34,6 +34,10 @@ app.use((req, res, next) => {
 
 app.use('/uploads', express.static('uploads'));
 
+app.get('/', (req, res) => {
+  res.send('ASTU Complaint System API is running. Please use /api endpoints.');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api', studentComplaintRoutes);
 app.use('/api', categoryRoutes);
@@ -42,22 +46,6 @@ app.use('/api',analyticsRoutes);
 app.use('/api',adminComplaintRoutes);
 app.use('/api',staffComplaintRoutes)
 app.use('/api',chatbotRoutes);
-
-
-// Add this temporarily at the top of your server.js
-// const http = require('http');
-
-// Make a request to an external service to see your IP
-http.get('http://api.ipify.org', (resp) => {
-  let data = '';
-  resp.on('data', (chunk) => { data += chunk; });
-  resp.on('end', () => {
-    console.log('✅ Your Render outbound IP is:', data);
-  });
-}).on('error', (err) => {
-  console.log('Error getting IP:', err.message);
-});
-
 
 
 const startServer = () =>{
