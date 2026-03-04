@@ -1,4 +1,4 @@
-import RegisterPage from '../../../components/RegisterPage.tsx'
+import RegisterPage from '@/components/RegisterPage.tsx'
 const page = () => {
   return (
     <div>

@@ -1,26 +1,26 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Home from "../src/pages/(public)/home/page.tsx"
-import About from '../src/pages/(public)/about/page.tsx'
-import Login from '../src/pages/(public)/login/page.tsx'
-import Register from '../src/pages/(public)/register/page.tsx'
-import DashboardLayout from './components/DashboardLayout'
+import Home from "@/pages/(public)/home/page.tsx"
+import About from '@/pages/(public)/about/page.tsx'
+import Login from '@/pages/(public)/login/page.tsx'
+import Register from '@/pages/(public)/register/page.tsx'
+import DashboardLayout from '@/components/DashboardLayout'
 
 // Student Components
-import SubmitComplaint from './components/student/SubmitComplaint.tsx'
-import ProfilePage from './components/student/Profile.tsx'
-import MyComplaints from './components/student/MyComplaints.tsx'
-import StudentDashboard from './components/student/StudentDashboard.tsx'
-import ComplaintDetail from './components/student/ComplaintDetail.tsx'
+import SubmitComplaint from '@/components/student/SubmitComplaint.tsx'
+import ProfilePage from '@/components/student/Profile.tsx'
+import MyComplaints from '@/components/student/MyComplaints.tsx'
+import StudentDashboard from '@/components/student/StudentDashboard.tsx'
+import ComplaintDetail from '@/components/student/ComplaintDetail.tsx'
 
-import ManageUsers from './components/admin/StudentsList.tsx'
-import CategoryManager from './components/admin/CategoryManager.tsx'
-import AdminComplaints from './components/admin/AdminComplaints.tsx'
-import AdminDashboard from './components/admin/AdminDashboard.tsx'
-import ComplaintDetails from './components/admin/ComplaintDetails.tsx'
-import StaffComplaintDetail from './components/staff/StaffComplaintDetail.tsx'
-import StaffDashboard from './components/staff/StaffDashboard.tsx'
-import AssignedComplaints from './components/staff/AssignedComplaints.tsx'
-import StaffManagement from './components/admin/StaffManagement.tsx'
+import ManageUsers from '@/components/admin/StudentsList.tsx'
+import CategoryManager from '@/components/admin/CategoryManager.tsx'
+import AdminComplaints from '@/components/admin/AdminComplaints.tsx'
+import AdminDashboard from '@/components/admin/AdminDashboard.tsx'
+import ComplaintDetails from '@/components/admin/ComplaintDetails.tsx'
+import StaffComplaintDetail from '@/components/staff/StaffComplaintDetail.tsx'
+import StaffDashboard from '@/components/staff/StaffDashboard.tsx'
+import AssignedComplaints from '@/components/staff/AssignedComplaints.tsx'
+import StaffManagement from '@/components/admin/StaffManagement.tsx'
 
 const App = () => {
   return (

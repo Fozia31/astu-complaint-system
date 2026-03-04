@@ -21,7 +21,7 @@ const StaffManagement = () => {
         api.get('/admin/complaints'),
         api.get('/admin/staff-list')
       ]);
-      setComplaints(compRes.data.complaints?.filter(c => c.status === 'pending') || []);
+      setComplaints(compRes.data.complaints?.filter((c: any) => c.status === 'pending') || []);
       setStaffList(staffRes.data.data || staffRes.data.staff || []);
     } catch (err) {
       console.error(err);
