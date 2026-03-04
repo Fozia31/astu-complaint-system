@@ -16,15 +16,12 @@ const StudentDashboard = () => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // 1. Load user from localStorage
     const savedUser = localStorage.getItem('user');
     if (savedUser) setUser(JSON.parse(savedUser));
 
-    // 2. Fetch real data from backend
     const fetchDashboardData = async () => {
       try {
         const response = await api.get('/student/complaints/my');
-        // Your backend returns { data: [...] }
         const data = response.data.data || [];
         setComplaints(data);
       } catch (error) {
@@ -37,7 +34,6 @@ const StudentDashboard = () => {
     fetchDashboardData();
   }, []);
 
-  // 3. Calculate dynamic stats
   const stats = [
     { 
       label: 'Total Complaints', 
@@ -62,7 +58,6 @@ const StudentDashboard = () => {
     },
   ];
 
-  // 4. Get the 3 most recent activities
   const recentActivity = complaints.slice(0, 3);
 
   if (loading) {

@@ -46,7 +46,6 @@ const SubmitComplaint = () => {
     }
   };
 
-  // --- NEW: AI API Interaction ---
   const handleAskAI = async () => {
     if (!chatInput.trim()) return;
 
