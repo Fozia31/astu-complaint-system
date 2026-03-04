@@ -16,7 +16,11 @@ import http from 'http';
 
 
 const corsOptions = {
-    origin: ['http://localhost:5173'], 
+    origin: [
+        'http://localhost:5173',
+        'https://astu-complaint-system-50ih9088s-foziyas-projects-e75111ea.vercel.app/',
+        /\.vercel\.app$/
+    ], 
     methods: ['GET','POST','PUT','DELETE','PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials:true
