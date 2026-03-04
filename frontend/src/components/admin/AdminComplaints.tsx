@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Calendar, Loader2, AlertCircle, UserPlus } from 'lucide-react';
-import api from '../../lib/api.tsx';
+import api from '@/lib/api.tsx';
 import AssignStaffModal from './AssignStaffModal';
 
 const AdminComplaints = () => {

@@ -4,7 +4,7 @@ import {
   MoreVertical, Mail, Shield, Loader2,
   ChevronLeft, ChevronRight, UserPlus
 } from 'lucide-react';
-import api from '../../lib/api.tsx';
+import api from '@/lib/api.tsx';
 
 const StudentsList = () => {
   const [users, setUsers] = useState([]);

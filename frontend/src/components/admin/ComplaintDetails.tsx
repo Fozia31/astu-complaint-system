@@ -5,7 +5,7 @@ import {
   CheckCircle, Trash2, ShieldCheck, Tag, 
   AlertCircle, Loader2, FileText, ExternalLink, Paperclip 
 } from 'lucide-react';
-import api from '../../lib/api.tsx';
+import api from '@/lib/api.tsx';
 
 const ComplaintDetails = () => {
   const { id } = useParams();

@@ -5,7 +5,7 @@ import {
   Loader2, Paperclip, 
   ShieldCheck, ExternalLink, AlertCircle
 } from 'lucide-react';
-import api from '../../lib/api.tsx';
+import api from '@/lib/api.tsx';
 
 const ComplaintDetail = () => {
   const { id } = useParams();

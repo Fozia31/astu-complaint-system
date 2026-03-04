@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListChecks, Clock, CheckCircle2, Eye, UserCheck } from 'lucide-react';
-import api from '../../lib/api.tsx';
+import api from '@/lib/api.tsx';
 
 const StaffDashboard = () => {
   const navigate = useNavigate();

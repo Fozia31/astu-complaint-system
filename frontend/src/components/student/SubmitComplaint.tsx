@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, Upload, Loader2, X, FileText, MessageCircle, Sparkles, Wand2 } from 'lucide-react';
-import { Button } from "../../components/ui/button.tsx";
-import { Input } from "../../components/ui/input.tsx";
-import api from '../../lib/api.tsx';
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import api from '@/lib/api.tsx';
 
 const SubmitComplaint = () => {
   const navigate = useNavigate();
