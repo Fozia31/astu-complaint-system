@@ -1,4 +1,4 @@
-import LoginPage from '@/components/LoginPage';
+import LoginPage from '../../../components/LoginPage.tsx';
 
 const page = () => {
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, Clock, Loader2, MessageSquare, AlertCircle, ChevronDown } from 'lucide-react';
-import api from '@/lib/api';
+import api from '../../lib/api.tsx';
 
 const StaffComplaintDetail = () => {
   const { id } = useParams();

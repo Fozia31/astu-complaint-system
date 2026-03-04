@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Home from "../src/pages/(public)/home/page.tsx"
 import About from '../src/pages/(public)/about/page.tsx'
-import Login from '@/pages/(public)/login/page.tsx'
-import Register from '@/pages/(public)/register/page.tsx'
+import Login from '../src/pages/(public)/login/page.tsx'
+import Register from '../src/pages/(public)/register/page.tsx'
 import DashboardLayout from './components/DashboardLayout'
 
 // Student Components

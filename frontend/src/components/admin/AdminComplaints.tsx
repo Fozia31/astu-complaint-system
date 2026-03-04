@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Calendar, Loader2, AlertCircle, UserPlus } from 'lucide-react';
-import api from '@/lib/api';
-// IMPORT the Modal component
+import api from '../../lib/api.tsx';
 import AssignStaffModal from './AssignStaffModal';
 
 const AdminComplaints = () => {
@@ -13,7 +12,6 @@ const AdminComplaints = () => {
   const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [error, setError] = useState<string | null>(null);
 
-  // MODAL STATE
   const [selectedComplaint, setSelectedComplaint] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

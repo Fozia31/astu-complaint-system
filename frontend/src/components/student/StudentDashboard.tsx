@@ -8,7 +8,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import api from '@/lib/api';
+import api from '../../lib/api.tsx';
 
 const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Clock, CheckCircle, AlertCircle, Inbox } from 'lucide-react';
 
 const AdminStats = ({ complaints }: { complaints: any[] }) => {
