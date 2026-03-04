@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { Search, Filter, Clock, Loader2, Inbox, Eye, X, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import api from '@/lib/api.tsx';
+import api from '@/lib/api';
 
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState<any[]>([]);

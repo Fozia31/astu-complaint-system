@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Eye, Search, AlertCircle, CheckCircle2, Clock, ListFilter, LayoutGrid } from 'lucide-react';
-import api from '@/lib/api.tsx';
+import api from '@/lib/api';
 import { useNavigate } from 'react-router-dom';
 
 const AssignedComplaints = () => {

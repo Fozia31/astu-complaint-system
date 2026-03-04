@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserCheck, Loader2, X, Search, UserPlus, ShieldCheck, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import api from '@/lib/api.tsx';
+import api from '@/lib/api';
 
 interface StaffMember {
   _id: string;

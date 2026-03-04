@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Camera, Save, Info, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import api from '@/lib/api.tsx';
+import api from '@/lib/api';
 
 const ProfilePage = () => {
   const [user, setUser] = useState<any>(null);

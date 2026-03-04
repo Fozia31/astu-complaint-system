@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Tag, Loader2, X, AlignLeft, Edit2, Check } from 'lucide-react';
-import api from '@/lib/api.tsx';
+import api from '@/lib/api';
 
 const CategoryManager = () => {
   const [categories, setCategories] = useState<any[]>([]);
